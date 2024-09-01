@@ -41,9 +41,8 @@ VSCode extension that adds syntax highlighting for tailwindcss classes in JavaSc
 <div align="center">
   <a href="https://github.com/sponsors/schoero">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./assets/sponsor-dark.svg">
-      <source media="(prefers-color-scheme: light)" srcset="./assets/sponsor-light.svg">
-      <img alt="vscode-tailwindcss-syntax-highlighting logo" src="./assets/sponsor-light.png">
+      <source srcset="./assets/sponsor-dark.svg">
+      <img alt="vscode-tailwindcss-syntax-highlighting logo" src="./assets/sponsor-dark.png">
     </picture>
   </a>
 </div>
