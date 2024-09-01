@@ -1,4 +1,12 @@
 
+## v0.1.2
+
+[compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.1.0...v0.1.2)
+
+### Documentation
+
+- Update description ([c02cbb8](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/commit/c02cbb8))
+
 ## v0.1.1
 
 [compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.0.4...v0.1.1)
