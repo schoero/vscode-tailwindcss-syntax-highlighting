@@ -1,6 +1,7 @@
 <div align="center">
   <picture>
-    <img alt="vscode-tailwindcss-syntax-highlighting logo" src="./assets/logo.svg">
+    <source srcset="./assets/logo.svg">
+    <img alt="vscode-tailwindcss-syntax-highlighting logo" src="./assets/logo.png">
   </picture>
 </div>
 
@@ -43,7 +44,7 @@ VSCode extension that adds syntax highlighting for tailwindcss classes in JavaSc
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="./assets/sponsor-dark.svg">
       <source media="(prefers-color-scheme: light)" srcset="./assets/sponsor-light.svg">
-      <img alt="vscode-tailwindcss-syntax-highlighting logo" src="./assets/sponsor-light.svg">
+      <img alt="vscode-tailwindcss-syntax-highlighting logo" src="./assets/sponsor-light.png">
     </picture>
   </a>
   
