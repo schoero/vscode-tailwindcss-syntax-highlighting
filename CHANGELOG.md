@@ -1,4 +1,12 @@
 
+## v0.1.1
+
+[compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.0.4...v0.1.1)
+
+### Chore
+
+- Update dependencies ([1718b2e](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/commit/1718b2e))
+
 ## v0.1.0
 
 [compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.0.3...v0.1.1)
