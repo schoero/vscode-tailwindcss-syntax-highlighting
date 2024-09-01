@@ -10,7 +10,15 @@
     "source.fixAll.markdownlint": "explicit",
     "source.organizeImports": "never"
   },
-  "eslint.validate": ["javascript", "typescript", "json", "jsonc", "json5", "yaml"],
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "json",
+    "jsonc",
+    "json5",
+    "yaml",
+    "github-actions-workflow"
+  ],
   "prettier.enable": false,
   "editor.formatOnSave": false,
   "editor.rulers": [
