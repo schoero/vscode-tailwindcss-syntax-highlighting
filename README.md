@@ -12,12 +12,12 @@
 
 <div align="center">
 
-  [![GitHub license](https://img.shields.io/github/license/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=6D9ACD)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/blob/main/LICENSE)
-  [![Version](https://img.shields.io/visual-studio-marketplace/v/schoero.vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=6D9ACD)](https://marketplace.visualstudio.com/items?itemName=schoero.vscode-tailwindcss-syntax-highlighting)
-  [![GitHub issues](https://img.shields.io/github/issues/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=6D9ACD)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/issues)
-  [![Downloads](https://img.shields.io/visual-studio-marketplace/d/schoero.vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=6D9ACD)](https://marketplace.visualstudio.com/items?itemName=schoero.vscode-tailwindcss-syntax-highlighting)
-  [![GitHub repo stars](https://img.shields.io/github/stars/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=6D9ACD)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/stargazers)
-  [![GitHub workflow status](https://img.shields.io/github/actions/workflow/status/schoero/vscode-tailwindcss-syntax-highlighting/ci.yml?event=push&style=flat-square&labelColor=454c5c&color=6D9ACD)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/actions?query=workflow%3ACI)
+  [![GitHub license](https://img.shields.io/github/license/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=AFD9F8)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/blob/main/LICENSE)
+  [![Version](https://img.shields.io/visual-studio-marketplace/v/schoero.vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=AFD9F8)](https://marketplace.visualstudio.com/items?itemName=schoero.vscode-tailwindcss-syntax-highlighting)
+  [![GitHub issues](https://img.shields.io/github/issues/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=AFD9F8)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/issues)
+  [![Downloads](https://img.shields.io/visual-studio-marketplace/d/schoero.vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=AFD9F8)](https://marketplace.visualstudio.com/items?itemName=schoero.vscode-tailwindcss-syntax-highlighting)
+  [![GitHub repo stars](https://img.shields.io/github/stars/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=AFD9F8)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/stargazers)
+  [![GitHub workflow status](https://img.shields.io/github/actions/workflow/status/schoero/vscode-tailwindcss-syntax-highlighting/ci.yml?event=push&style=flat-square&labelColor=454c5c&color=AFD9F8)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/actions?query=workflow%3ACI)
 
 </div>
 
@@ -25,7 +25,7 @@
 <br/>
 
 <div align="center">
-VSCode extension that adds syntax highlighting for tailwindcss classes in JavaScript, TypeScript, JSX files.
+VSCode extension that adds syntax highlighting for tailwindcss classes in HTML, JSX and TSX files.
 </div>
 
 <br/>
