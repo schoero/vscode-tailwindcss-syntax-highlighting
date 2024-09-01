@@ -1,7 +1,15 @@
 
+## v0.0.4
+
+[compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.0.3...v0.0.4)
+
+### Fixes
+
+- Highlighting fixes for functions ([6081252](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/commit/6081252))
+
 ## v0.0.3
 
-[compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.0.1...v0.0.3)
+[compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.0.2...v0.0.3)
 
 ### Documentation
 
