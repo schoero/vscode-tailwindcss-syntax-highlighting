@@ -1,0 +1,22 @@
+{
+  // eslint
+  "[javascript][json][json5][jsonc][typescript][yaml]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+
+  // vscode
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.markdownlint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "eslint.validate": ["javascript", "typescript", "json", "jsonc", "json5", "yaml"],
+  "prettier.enable": false,
+  "editor.formatOnSave": false,
+  "editor.rulers": [
+    119
+  ],
+  "search.exclude": {
+    "out": true
+  }
+}

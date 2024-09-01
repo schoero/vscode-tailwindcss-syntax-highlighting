@@ -1,0 +1,85 @@
+{
+  "version": "0.0.1",
+  "type": "module",
+  "name": "vscode-tailwindcss-syntax-highlighting",
+  "displayName": "Syntax Highlighting for Tailwind CSS",
+  "description": "Syntax highlighting for Tailwind CSS",
+  "license": "MIT",
+  "author": "Roger Schönbächler",
+  "homepage": "https://github.com/schoero/vscode-tailwindcss-syntax-highlighting#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schoero/vscode-tailwindcss-syntax-highlighting.git"
+  },
+  "bugs": {
+    "url": "https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/issues"
+  },
+  "scripts": {
+    "eslint": "eslint .",
+    "eslint:ci": "npm run eslint -- --max-warnings 0",
+    "eslint:fix": "npm run eslint -- --fix",
+    "lint": "npm run eslint && npm run markdownlint",
+    "lint:ci": "npm run eslint:ci && npm run markdownlint:ci",
+    "lint:fix": "npm run eslint:fix && npm run markdownlint:fix",
+    "markdownlint": "markdownlint-cli2 '**/*.md' '#node_modules'",
+    "markdownlint:ci": "npm run markdownlint",
+    "markdownlint:fix": "npm run markdownlint -- --fix",
+    "postrelease": "eslint --fix package.json && markdownlint-cli2-fix 'CHANGELOG.md'",
+    "prerelease": "npm run lint && npm run spellcheck ",
+    "publish": "changelogen gh release && node --env-file .env vsce publish -p $MARKETPLACE_TOKEN",
+    "release": "changelogen --bump --output",
+    "spellcheck": "cspell lint",
+    "spellcheck:ci": "npm run spellcheck -- --no-progress",
+    "typecheck": "tsc --noEmit",
+    "watch": "tsc -w"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "devDependencies": {
+    "@schoero/configs": "^1.1.0",
+    "changelogen": "^0.5.5",
+    "cspell": "^8.14.2",
+    "eslint": "^9.9.1",
+    "markdownlint": "^0.34.0",
+    "vsce": "^2.15.0"
+  },
+  "keywords": [
+    "tailwind",
+    "css",
+    "tailwindcss",
+    "typescript",
+    "javascript",
+    "js",
+    "ts",
+    "jsx",
+    "tsx",
+    "syntax",
+    "highlighting"
+  ],
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "grammars": [
+      {
+        "embeddedLanguages": {
+          "meta.tag.js": "js",
+          "meta.tag.jsx": "jsx",
+          "meta.tag.ts": "ts",
+          "meta.tag.tsx": "tsx"
+        },
+        "injectTo": [
+          "source.js",
+          "source.jsx",
+          "source.ts",
+          "source.tsx"
+        ],
+        "path": "./syntaxes/tailwindcss.json",
+        "scopeName": "source.tailwindcss"
+      }
+    ]
+  },
+  "icon": "assets/icon.png",
+  "publisher": "schoero"
+}
