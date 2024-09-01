@@ -1,4 +1,12 @@
 
+## v0.1.0
+
+[compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.0.3...v0.1.1)
+
+### Features
+
+- Add support for html ([95057f2](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/commit/95057f2))
+
 ## v0.0.4
 
 [compare changes](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/compare/v0.0.3...v0.0.4)
