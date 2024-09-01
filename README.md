@@ -12,12 +12,12 @@
 
 <div align="center">
 
-  [![GitHub license](https://img.shields.io/github/license/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=00AD51)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/blob/main/LICENSE)
-  [![Version](https://img.shields.io/visual-studio-marketplace/v/schoero.vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=00AD51)](https://marketplace.visualstudio.com/items?itemName=schoero.vscode-tailwindcss-syntax-highlighting)
-  [![GitHub issues](https://img.shields.io/github/issues/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=00AD51)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/issues)
-  [![Downloads](https://img.shields.io/visual-studio-marketplace/d/schoero.vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=00AD51)](https://marketplace.visualstudio.com/items?itemName=schoero.vscode-tailwindcss-syntax-highlighting)
-  [![GitHub repo stars](https://img.shields.io/github/stars/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=00AD51)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/stargazers)
-  [![GitHub workflow status](https://img.shields.io/github/actions/workflow/status/schoero/vscode-tailwindcss-syntax-highlighting/ci.yml?event=push&style=flat-square&labelColor=454c5c&color=00AD51)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/actions?query=workflow%3ACI)
+  [![GitHub license](https://img.shields.io/github/license/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=B78DBA)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/blob/main/LICENSE)
+  [![Version](https://img.shields.io/visual-studio-marketplace/v/schoero.vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=BC88AD)](https://marketplace.visualstudio.com/items?itemName=schoero.vscode-tailwindcss-syntax-highlighting)
+  [![GitHub issues](https://img.shields.io/github/issues/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=C1829F)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/issues)
+  [![Downloads](https://img.shields.io/visual-studio-marketplace/d/schoero.vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=C77D92)](https://marketplace.visualstudio.com/items?itemName=schoero.vscode-tailwindcss-syntax-highlighting)
+  [![GitHub repo stars](https://img.shields.io/github/stars/schoero/vscode-tailwindcss-syntax-highlighting?style=flat-square&labelColor=454c5c&color=CC7784)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/stargazers)
+  [![GitHub workflow status](https://img.shields.io/github/actions/workflow/status/schoero/vscode-tailwindcss-syntax-highlighting/ci.yml?event=push&style=flat-square&labelColor=454c5c&color=D17277)](https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/actions?query=workflow%3ACI)
 
 </div>
 
