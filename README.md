@@ -57,13 +57,6 @@ VSCode extension that adds syntax highlighting for tailwindcss classes in JavaSc
 <br/>
 <br/>
 
-### Want to further improve the readability of your tailwindcss classes?
-
-Check out [eslint-plugin-readable-tailwind](https://github.com/schoero/eslint-plugin-readable-tailwind) to automatically break up long tailwind class strings into multiple lines based on a specified print width or class count.
-
-<br/>
-<br/>
-
 ### Customization
 
 You can customize the colors of the syntax highlighting in your settings.json file.
@@ -104,3 +97,10 @@ You can customize the colors of the syntax highlighting in your settings.json fi
   }
 }
 ```
+
+<br/>
+<br/>
+
+### Want to further improve the readability of your tailwindcss classes?
+
+Check out [eslint-plugin-readable-tailwind](https://github.com/schoero/eslint-plugin-readable-tailwind) to automatically break up long tailwind class strings into multiple lines based on a specified print width or class count.
