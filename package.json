@@ -1,5 +1,5 @@
 {
-  "version": "0.0.4",
+  "version": "0.1.0",
   "type": "module",
   "name": "vscode-tailwindcss-syntax-highlighting",
   "displayName": "Syntax Highlighting for Tailwind CSS",
@@ -54,6 +54,7 @@
     "ts",
     "jsx",
     "tsx",
+    "html",
     "syntax",
     "highlighting"
   ],
@@ -67,6 +68,7 @@
     "grammars": [
       {
         "embeddedLanguages": {
+          "meta.tag.html": "html",
           "meta.tag.js": "js",
           "meta.tag.jsx": "jsx",
           "meta.tag.ts": "ts",
@@ -76,7 +78,8 @@
           "source.js",
           "source.jsx",
           "source.ts",
-          "source.tsx"
+          "source.tsx",
+          "text.html"
         ],
         "path": "./syntaxes/tailwindcss.json",
         "scopeName": "source.tailwindcss"

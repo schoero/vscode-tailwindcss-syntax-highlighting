@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "injectionSelector": "L:source.js -comment, L:source.ts -comment, L:source.jsx -comment, L:source.tsx -comment",
+  "injectionSelector": "L:source.js -comment, L:source.ts -comment, L:source.jsx -comment, L:source.tsx -comment, L:text.html -comment",
   "name": "tailwindcss syntax highlighting",
   "patterns": [
     {
