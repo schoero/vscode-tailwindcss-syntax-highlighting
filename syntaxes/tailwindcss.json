@@ -129,16 +129,34 @@
                       "name": "keyword.operator.assignment.tailwindcss"
                     },
                     "3": {
-                      "name": "support.constant.property-value.css.tailwindcss",
                       "patterns": [
                         {
+                          "captures": {
+                            "1": {
+                              "name": "property-value.tailwindcss",
+                              "patterns": [
+                                {
+                                  "include": "#numbers"
+                                },
+                                {
+                                  "include": "#functions"
+                                },
+                                {
+                                  "include": "#selectors"
+                                },
+                                {
+                                  "include": "#commas"
+                                }
+                              ]
+                            }
+                          },
                           "match": "(.*)",
-                          "name": "property-value.tailwindcss"
+                          "name": "support.constant.property-value.css.tailwindcss"
                         }
                       ]
                     }
                   },
-                  "match": "([\\w-]+)(:)([\\w-]+)"
+                  "match": "([\\w-]+)(:)(.*)"
                 },
                 {
                   "include": "#numbers"
@@ -148,6 +166,9 @@
                 },
                 {
                   "include": "#selectors"
+                },
+                {
+                  "include": "#commas"
                 }
               ]
             },
@@ -155,7 +176,7 @@
               "name": "meta.brace.square.tailwindcss"
             }
           },
-          "match": "(\\[)(.*)?(\\])"
+          "match": "(\\[)(.*)(\\])"
         }
       ]
     },
@@ -202,6 +223,14 @@
         }
       ]
     },
+    "commas": {
+      "captures": {
+        "1": {
+          "name": "punctuation.separator.comma.tailwindcss"
+        }
+      },
+      "match": "(,)"
+    },
     "functions": {
       "patterns": [
         {
@@ -222,6 +251,9 @@
                 },
                 {
                   "include": "#operators"
+                },
+                {
+                  "include": "#commas"
                 }
               ]
             },
@@ -229,7 +261,7 @@
               "name": "punctuation.section.function.end.bracket.round.css.tailwindcss"
             }
           },
-          "match": "(\\w+)(\\()(.*?)(\\))"
+          "match": "([\\w-]+)(\\()(.*?)(\\))"
         }
       ]
     },
