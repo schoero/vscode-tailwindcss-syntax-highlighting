@@ -1,0 +1,313 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "injectionSelector": "L:source.js -comment, L:source.ts -comment, L:source.jsx -comment, L:source.tsx -comment, L:text.html -comment",
+  "name": "tailwindcss syntax highlighting",
+  "patterns": [
+    {
+      "include": "#class-attribute"
+    }
+  ],
+  "repository": {
+    "braces": {
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.block.tailwindcss"
+        }
+      },
+      "match": "([{}])"
+    },
+    "brackets": {
+      "captures": {
+        "1": {
+          "name": "meta.brace.square.tailwindcss"
+        },
+        "2": {
+          "patterns": [
+            {
+              "captures": {
+                "1": {
+                  "name": "support.type.property-name.css.tailwindcss",
+                  "patterns": [
+                    {
+                      "match": "(.*)",
+                      "name": "property-name.tailwindcss"
+                    }
+                  ]
+                },
+                "2": {
+                  "name": "keyword.operator.assignment.tailwindcss"
+                },
+                "3": {
+                  "patterns": [
+                    {
+                      "captures": {
+                        "1": {
+                          "name": "property-value.tailwindcss",
+                          "patterns": [
+                            {
+                              "include": "#numbers"
+                            },
+                            {
+                              "include": "#functions"
+                            },
+                            {
+                              "include": "#selectors"
+                            },
+                            {
+                              "include": "#commas"
+                            }
+                          ]
+                        }
+                      },
+                      "match": "(.*)",
+                      "name": "support.constant.property-value.css.tailwindcss"
+                    }
+                  ]
+                }
+              },
+              "match": "([\\w-]+)(:)(.*)"
+            },
+            {
+              "include": "#numbers"
+            },
+            {
+              "include": "#functions"
+            },
+            {
+              "include": "#selectors"
+            },
+            {
+              "include": "#commas"
+            }
+          ]
+        },
+        "3": {
+          "name": "meta.brace.square.tailwindcss"
+        }
+      },
+      "match": "(\\[)(.*)(\\])"
+    },
+    "class-attribute": {
+      "begin": "\\s*\\b(class|className)\\b\\s*(=)\\s*({)?([\"'`])",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.other.attribute-name.tailwindcss"
+        },
+        "2": {
+          "name": "keyword.operator.assignment.tailwindcss"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#braces"
+            }
+          ]
+        },
+        "4": {
+          "patterns": [
+            {
+              "include": "#quotes"
+            }
+          ]
+        }
+      },
+      "end": "([\\4])(})?",
+      "endCaptures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#quotes"
+            }
+          ]
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#braces"
+            }
+          ]
+        }
+      },
+      "patterns": [
+        {
+          "include": "#multi-class-string-without-quotes"
+        }
+      ]
+    },
+    "commas": {
+      "captures": {
+        "1": {
+          "name": "punctuation.separator.comma.tailwindcss"
+        }
+      },
+      "match": "(,)"
+    },
+    "functions": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "support.function.css.tailwindcss"
+            },
+            "2": {
+              "name": "punctuation.section.function.begin.bracket.round.css.tailwindcss"
+            },
+            "3": {
+              "patterns": [
+                {
+                  "include": "#numbers"
+                },
+                {
+                  "include": "#functions"
+                },
+                {
+                  "include": "#operators"
+                },
+                {
+                  "include": "#commas"
+                }
+              ]
+            },
+            "4": {
+              "name": "punctuation.section.function.end.bracket.round.css.tailwindcss"
+            }
+          },
+          "match": "([\\w-]+)(\\()(.*?)(\\))"
+        }
+      ]
+    },
+    "important": {
+      "match": "(!(?=\\w))",
+      "name": "keyword.other.important.css.tailwindcss"
+    },
+    "multi-class-string-without-quotes": {
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#tailwindcss-class-with-variants"
+            }
+          ]
+        }
+      },
+      "match": "([^\\s]+?)"
+    },
+    "negate": {
+      "captures": {
+        "1": {
+          "name": "keyword.operator.arithmetic.css.tailwindcss"
+        }
+      },
+      "match": "(-(?=\\w))"
+    },
+    "numbers": {
+      "captures": {
+        "1": {
+          "name": "constant.numeric.decimal.tailwindcss"
+        },
+        "2": {
+          "name": "constant.numeric.css.tailwindcss"
+        }
+      },
+      "match": "([0-9]+)([a-zA-Z%]+)?"
+    },
+    "operators": {
+      "captures": {
+        "1": {
+          "name": "keyword.operator.arithmetic.css.tailwindcss"
+        }
+      },
+      "match": "([/*+-])"
+    },
+    "quotes": {
+      "patterns": [
+        {
+          "match": "(\")",
+          "name": "string.quoted.double.tailwindcss"
+        },
+        {
+          "match": "(')",
+          "name": "string.quoted.single.tailwindcss"
+        },
+        {
+          "match": "(`)",
+          "name": "string.quoted.backtick.tailwindcss"
+        }
+      ]
+    },
+    "selectors": {
+      "captures": {
+        "1": {
+          "name": "keyword.operator.combinator.css.tailwindcss"
+        }
+      },
+      "match": "([>+~&\\*])"
+    },
+    "slash": {
+      "captures": {
+        "1": {
+          "name": "keyword.operator.arithmetic.css.tailwindcss"
+        }
+      },
+      "match": "(/)"
+    },
+    "tailwindcss-class": {
+      "captures": {
+        "1": {
+          "name": "class.tailwindcss",
+          "patterns": [
+            {
+              "include": "#numbers"
+            },
+            {
+              "include": "#brackets"
+            },
+            {
+              "include": "#functions"
+            },
+            {
+              "include": "#slash"
+            },
+            {
+              "include": "#important"
+            }
+          ]
+        }
+      },
+      "match": "[^:]*?([^\\s]+)",
+      "name": "support.type.property-name.css.tailwindcss"
+    },
+    "tailwindcss-class-with-variants": {
+      "patterns": [
+        {
+          "include": "#negate"
+        },
+        {
+          "include": "#variant"
+        },
+        {
+          "include": "#tailwindcss-class"
+        }
+      ]
+    },
+    "variant": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.tailwindcss",
+              "patterns": [
+                {
+                  "match": "(.*)",
+                  "name": "variant.tailwindcss"
+                }
+              ]
+            }
+          },
+          "match": "([\\w-]+:)"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.tailwindcss"
+}

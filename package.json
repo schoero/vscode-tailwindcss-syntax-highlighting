@@ -81,7 +81,7 @@
           "source.tsx",
           "text.html"
         ],
-        "path": "./syntaxes/tailwindcss.json",
+        "path": "./syntaxes/tailwindcss.tmLanguage.json",
         "scopeName": "source.tailwindcss"
       }
     ]
