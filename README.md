@@ -58,9 +58,14 @@
 
 ### Customization
 
-All colors of the syntax highlighting are customizable via the `.vscode/settings.json` file or via the user `settings.json` file from vscode.
-You can always use the `Developer: Inspect Editor Tokens and Scopes` command from the command palette in vscode to find out the scope of a specific token.
+The colors of the syntax highlighting should in most cases be done in the user settings of vscode. To open the user settings you can open the command palette with
+<kbd>F1</kbd> and search for `Preferences: Open User Settings (JSON)`.  
+  
+You can use the `Developer: Inspect Editor Tokens and Scopes` command from the command palette in vscode to find out the scope of a specific token.  
 For custom styling you should always use the `*.custom.tailwindcss` scope.
+
+<br/>
+<br/>
 
 ```jsonc
 {
