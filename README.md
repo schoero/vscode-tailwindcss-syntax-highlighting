@@ -58,38 +58,156 @@
 
 ### Customization
 
-You can customize the colors of the syntax highlighting in your settings.json file.
+All colors of the syntax highlighting are customizable via the `.vscode/settings.json` file or via the user `settings.json` file from vscode.
+You can always use the `Developer: Inspect Editor Tokens and Scopes` command from the command palette in vscode to find out the scope of a specific token.
+For custom styling you should always use the `*.custom.tailwindcss` scope.
 
 ```jsonc
 {
   "editor.tokenColorCustomizations": {
     "textMateRules": [
       {
-        // tailwind variant modifier eg. hover: or before:
-        "scope": "variant.tailwindcss",
+        // tailwind classes
+        // hover:text-black-500
+        // ^^^^^^^^^^^^^^^^^^^^
+        "scope": "class.custom.tailwindcss",
+        "settings": {
+          "foreground": "#AFD9F8"
+        }
+      },
+      {
+        // tailwind variant modifier
+        // hover:text-black-500/10
+        // ^^^^^^
+        "scope": "variant.custom.tailwindcss",
         "settings": {
           "foreground": "#B583D3"
         }
       },
       {
-        // tailwind classes eg. flex or rounded
-        "scope": "class.tailwindcss",
+        // the property name of a custom property
+        // hover:[top:_10px]
+        //        ^^^
+        "scope": "property-name.custom.tailwindcss",
         "settings": {
           "foreground": "#CA7979"
         }
       },
       {
-        // the property name of a custom property eg. [top:_10px]
-        "scope": "property-name.tailwindcss",
-        "settings": {
-          "foreground": "#CA7979"
-        }
-      },
-      {
-        // the value of a custom property eg. [top:_10px]
-        "scope": "property-value.tailwindcss",
+        // the value of a custom property
+        // [top:_10px]
+        //      ^^^^^
+        "scope": "property-value.custom.tailwindcss",
         "settings": {
           "foreground": "#BABABA"
+        }
+      },
+      {
+        // numbers
+        // text-red-500 [top:_10px]
+        //          ^^^       ^^
+        "scope": "number.custom.tailwindcss",
+        "settings": {
+          "foreground": "#DDDBB4"
+        }
+      },
+      {
+        // units
+        // [top:_10px]
+        //         ^^
+        "scope": "unit.custom.tailwindcss",
+        "settings": {
+          "foreground": "#DDDBB4"
+        }
+      },
+      {
+        // square brackets
+        // w-[calc(100%_+_4px)]
+        //   ^                ^
+        "scope": "bracket.custom.tailwindcss",
+        "settings": {
+          "foreground": "#AFD9F8"
+        }
+      },
+      {
+        // css functions in custom properties
+        // w-[calc(100%_+_4px)]
+        //    ^^^^
+        "scope": "function.custom.tailwindcss",
+        "settings": {
+          "foreground": "#DDDBB4"
+        }
+      },
+      {
+        // round brackets
+        // w-[calc(100%_+_4px)]
+        //        ^          ^
+        "scope": "parenthesis.custom.tailwindcss",
+        "settings": {
+          "foreground": "#AFD9F8"
+        }
+      },
+      {
+        // operators
+        // w-[calc(100%_+_4px)] text-red-500/10
+        //              ^                   ^
+        "scope": "operator.custom.tailwindcss",
+        "settings": {
+          "foreground": "#BABABA"
+        }
+      },
+      {
+        // the important prefix
+        // !text-red-500
+        // ^
+        "scope": "important.custom.tailwindcss",
+        "settings": {
+          "foreground": "#BABABA"
+        }
+      },
+      {
+        // css selectors
+        // [&>div]:p-4
+        //  ^^
+        "scope": "selector.custom.tailwindcss",
+        "settings": {
+          "foreground": "#DDDBB4"
+        }
+      },
+      {
+        // tailwindcss whitespace substitute
+        // [top:_10px]
+        //      ^
+        "scope": "whitespace.custom.tailwindcss",
+        "settings": {
+          "foreground": "#CA797966"
+        }
+      },
+      {
+        // quoted strings
+        // before:content-['content']
+        //                 ^^^^^^^^^
+        "scope": "string.custom.tailwindcss",
+        "settings": {
+          "foreground": "#A6C088"
+        }
+      },
+      {
+        // css variables
+        // [top:_var(--my-var)]
+        //           ^^^^^^^^
+        "scope": "variable.custom.tailwindcss",
+        "settings": {
+          "foreground": "#CA7979"
+        }
+      },
+      {
+        // css currentColor
+        // [background-color:_currentColor]
+        //                    ^^^^^^^^^^^^
+        "scope": "current-color.custom.tailwindcss",
+        "settings": {
+          "foreground": "#80C4B2"
         }
       }
     ]
