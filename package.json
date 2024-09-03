@@ -3,7 +3,7 @@
   "type": "module",
   "name": "vscode-tailwindcss-syntax-highlighting",
   "displayName": "Syntax Highlighting for Tailwind CSS",
-  "description": "Syntax highlighting for Tailwind CSS",
+  "description": "Adds syntax highlighting for tailwindcss classes in html and jsx or tsx files.",
   "license": "MIT",
   "author": "Roger Schönbächler",
   "homepage": "https://github.com/schoero/vscode-tailwindcss-syntax-highlighting#readme",
