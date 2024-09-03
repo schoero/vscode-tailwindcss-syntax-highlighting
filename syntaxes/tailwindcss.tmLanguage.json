@@ -445,7 +445,13 @@
     "whitespace": {
       "captures": {
         "1": {
-          "name": "whitespace.custom.tailwindcss"
+          "name": "punctuation.whitespace.css.tailwindcss",
+          "patterns": [
+            {
+              "match": "(.*)",
+              "name": "whitespace.custom.tailwindcss"
+            }
+          ]
         }
       },
       "match": "(_)"
