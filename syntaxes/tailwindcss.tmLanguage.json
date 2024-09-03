@@ -4,7 +4,10 @@
   "name": "tailwindcss syntax highlighting",
   "patterns": [
     {
-      "include": "#class-attribute"
+      "include": "#singleline-class-attribute"
+    },
+    {
+      "include": "#multiline-class-attribute"
     }
   ],
   "repository": {
@@ -87,53 +90,6 @@
       },
       "match": "(\\[)(.*)(\\])"
     },
-    "class-attribute": {
-      "begin": "\\s*\\b(class|className)\\b\\s*(=)\\s*({)?([\"'`])",
-      "beginCaptures": {
-        "1": {
-          "name": "entity.other.attribute-name.tailwindcss"
-        },
-        "2": {
-          "name": "keyword.operator.assignment.tailwindcss"
-        },
-        "3": {
-          "patterns": [
-            {
-              "include": "#braces"
-            }
-          ]
-        },
-        "4": {
-          "patterns": [
-            {
-              "include": "#quotes"
-            }
-          ]
-        }
-      },
-      "end": "([\\4])(})?",
-      "endCaptures": {
-        "1": {
-          "patterns": [
-            {
-              "include": "#quotes"
-            }
-          ]
-        },
-        "2": {
-          "patterns": [
-            {
-              "include": "#braces"
-            }
-          ]
-        }
-      },
-      "patterns": [
-        {
-          "include": "#multi-class-string-without-quotes"
-        }
-      ]
-    },
     "commas": {
       "captures": {
         "1": {
@@ -190,7 +146,54 @@
           ]
         }
       },
-      "match": "([^\\s]+?)"
+      "match": "([^\\s]+)"
+    },
+    "multiline-class-attribute": {
+      "begin": "\\s*\\b(class|className)\\b\\s*(=)\\s*({)?\\s*([\"'`])",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.other.attribute-name.tailwindcss"
+        },
+        "2": {
+          "name": "keyword.operator.assignment.tailwindcss"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#braces"
+            }
+          ]
+        },
+        "4": {
+          "patterns": [
+            {
+              "include": "#quotes"
+            }
+          ]
+        }
+      },
+      "end": "(\\4)\\s*(})?",
+      "endCaptures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#quotes"
+            }
+          ]
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#braces"
+            }
+          ]
+        }
+      },
+      "patterns": [
+        {
+          "include": "#multi-class-string-without-quotes"
+        }
+      ]
     },
     "negate": {
       "captures": {
@@ -243,6 +246,56 @@
       },
       "match": "([>+~&\\*])"
     },
+    "singleline-class-attribute": {
+      "captures": {
+        "1": {
+          "name": "entity.other.attribute-name.tailwindcss"
+        },
+        "2": {
+          "name": "keyword.operator.assignment.tailwindcss"
+        },
+        "3": {
+          "name": "punctuation.definition.block.tailwindcss"
+        },
+        "4": {
+          "name": "string.quoted.tailwindcss",
+          "patterns": [
+            {
+              "include": "#quotes"
+            }
+          ]
+        },
+        "5": {
+          "name": "string.quoted.tailwindcss",
+          "patterns": [
+            {
+              "captures": {
+                "1": {
+                  "patterns": [
+                    {
+                      "include": "#tailwindcss-class-with-variants"
+                    }
+                  ]
+                }
+              },
+              "match": "([^\\s]+)"
+            }
+          ]
+        },
+        "6": {
+          "name": "string.quoted.tailwindcss",
+          "patterns": [
+            {
+              "include": "#quotes"
+            }
+          ]
+        },
+        "7": {
+          "name": "punctuation.definition.block.tailwindcss"
+        }
+      },
+      "match": "\\s*\\b(class|className)\\b\\s*(=)\\s*({)?\\s*([\"'`])\\s*(.*?)\\s*(\\4)(?:\\s*(?=\\s*}))?(})?"
+    },
     "slash": {
       "captures": {
         "1": {
@@ -291,22 +344,18 @@
       ]
     },
     "variant": {
-      "patterns": [
-        {
-          "captures": {
-            "1": {
-              "name": "keyword.control.tailwindcss",
-              "patterns": [
-                {
-                  "match": "(.*)",
-                  "name": "variant.tailwindcss"
-                }
-              ]
+      "captures": {
+        "1": {
+          "name": "keyword.control.tailwindcss",
+          "patterns": [
+            {
+              "match": "(.*)",
+              "name": "variant.tailwindcss"
             }
-          },
-          "match": "([\\w-]+:)"
+          ]
         }
-      ]
+      },
+      "match": "([\\w-]+:)"
     }
   },
   "scopeName": "source.tailwindcss"
