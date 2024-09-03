@@ -25,7 +25,7 @@
 <br/>
 
 <div align="center">
-VSCode extension that adds syntax highlighting for tailwindcss classes in HTML, JSX and TSX files.
+  VSCode extension that adds syntax highlighting for tailwindcss classes in HTML, JSX and TSX files.
 </div>
 
 <br/>
