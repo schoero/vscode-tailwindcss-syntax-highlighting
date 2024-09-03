@@ -58,7 +58,7 @@
 
 ### Customization
 
-The colors of the syntax highlighting should in most cases be done in the user settings of vscode. To open the user settings you can open the command palette with
+The colors of the syntax highlighting should in most cases be customized in the user settings of vscode. To open the user settings you can open the command palette with
 <kbd>F1</kbd> and search for `Preferences: Open User Settings (JSON)`.  
   
 You can use the `Developer: Inspect Editor Tokens and Scopes` command from the command palette in vscode to find out the scope of a specific token.  
