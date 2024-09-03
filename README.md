@@ -5,7 +5,7 @@
   </picture>
 </div>
 
-<h1 align="center">vscode-tailwindcss-syntax-highlighting</h1>
+<h1 align="center">Syntax Highlighting for Tailwind CSS</h1>
 
 <br/>
 <br/>
