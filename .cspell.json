@@ -3,5 +3,16 @@
     "@schoero/configs/cspell"
   ],
   "words": [
+    "Atrule",
+    "callees",
+    "clsx",
+    "csstree",
+    "currentcolor",
+    "dcnb",
+    "estree",
+    "javascriptreact",
+    "objstr",
+    "quasis",
+    "wasip"
   ]
 }

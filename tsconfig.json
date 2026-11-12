@@ -1,0 +1,12 @@
+{
+  "extends": "@schoero/configs/tsconfig",
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "target": "ES2022",
+    "types": ["node", "vscode"],
+    "noEmit": true,
+    "noImplicitAny": false,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src", "vite.config.ts"]
+}

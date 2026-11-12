@@ -1,0 +1,146 @@
+import { hasESNodeParentExtension, isESSimpleStringLiteral } from "../parsers/es.js";
+import { MATCHER_RESULT } from "../types/rule.js";
+import { getCachedRegex } from "./regex.js";
+import { isGenericNodeWithParent } from "./utils.js";
+
+import type { Node as ESNode } from "estree";
+
+import type { Rule } from "../types/eslint.js";
+import type { WithParent } from "../types/estree.js";
+import type { MatcherFunctions } from "../types/rule.js";
+import type { GenericNodeWithParent } from "./utils.js";
+
+
+export function getLiteralNodesByMatchers<Node>(ctx: Rule.RuleContext, node: unknown, matcherFunctions: MatcherFunctions): Node[] {
+  if(!isGenericNodeWithParent(node)){ return []; }
+
+  const { nestedMatcherFunctions, self } = matcherFunctions.reduce<{
+    nestedMatcherFunctions: MatcherFunctions;
+    self: Node[];
+  }>((matchedNodes, matcherFunction) => {
+    const result = matcherFunction(node);
+
+    if(result === MATCHER_RESULT.NO_MATCH){
+      matchedNodes.nestedMatcherFunctions.push(matcherFunction);
+      return matchedNodes;
+    }
+
+    if(result === MATCHER_RESULT.MATCH){
+      matchedNodes.self.unshift(node as Node);
+      matchedNodes.nestedMatcherFunctions.push(matcherFunction);
+      return matchedNodes;
+    }
+
+    if(result === MATCHER_RESULT.UNCROSSABLE_BOUNDARY){
+      return matchedNodes;
+    }
+
+    matchedNodes.nestedMatcherFunctions.push(...result);
+    return matchedNodes;
+  }, {
+    nestedMatcherFunctions: [],
+    self: []
+  });
+
+  const nestedLiterals = findMatchingNestedNodes<Node>(node, nestedMatcherFunctions);
+
+  return [...nestedLiterals, ...self];
+}
+
+function findMatchingNestedNodes<Node>(node: GenericNodeWithParent, matcherFunctions: MatcherFunctions) {
+  if(matcherFunctions.length === 0){
+    return [];
+  }
+
+  return Object.entries(node).reduce<Node[]>((matchedNodes, [key, value]) => {
+    if(!value || typeof value !== "object" || key === "parent"){
+      return matchedNodes;
+    }
+
+    let isMatch = false;
+    let currentMatcherFunctions: MatcherFunctions = [...matcherFunctions];
+    let hasMatcherFunctions = currentMatcherFunctions.length > 0;
+
+    while(hasMatcherFunctions){
+      const nextMatcherFunctions: MatcherFunctions = [];
+      const nestedMatcherFunctions: MatcherFunctions = [];
+
+      for(const matcherFunction of currentMatcherFunctions){
+        const result = matcherFunction(value);
+
+        if(result === MATCHER_RESULT.NO_MATCH){
+          nextMatcherFunctions.push(matcherFunction);
+          continue;
+        }
+
+        if(result === MATCHER_RESULT.MATCH){
+          isMatch = true;
+          nextMatcherFunctions.push(matcherFunction);
+          continue;
+        }
+
+        if(result === MATCHER_RESULT.UNCROSSABLE_BOUNDARY){
+          continue;
+        }
+
+        for(const nestedMatcherFunction of result){
+          nestedMatcherFunctions.push(nestedMatcherFunction);
+        }
+      }
+
+      hasMatcherFunctions = nestedMatcherFunctions.length > 0;
+      currentMatcherFunctions = hasMatcherFunctions
+        ? nestedMatcherFunctions
+        : nextMatcherFunctions;
+    }
+
+    if(isMatch){
+      matchedNodes.push(value as Node);
+    }
+
+    if(currentMatcherFunctions.length === 0){
+      return matchedNodes;
+    }
+
+    matchedNodes.push(...findMatchingNestedNodes<Node>(value, currentMatcherFunctions));
+    return matchedNodes;
+  }, []);
+}
+
+export function matchesPathPattern(path: string, pattern: string): boolean {
+  return getCachedRegex(pattern).test(path);
+}
+
+export function isInsideConditionalExpressionTest(node: WithParent<ESNode>): boolean {
+  if(!hasESNodeParentExtension(node)){ return false; }
+  if(node.parent.type === "ConditionalExpression" && node.parent.test === node){ return true; }
+  return isInsideConditionalExpressionTest(node.parent);
+}
+
+export function isInsideDisallowedBinaryExpression(node: WithParent<ESNode>): boolean {
+  if(!hasESNodeParentExtension(node)){ return false; }
+  if(
+    node.parent.type === "BinaryExpression" &&
+    node.parent.operator !== "+" // allow string concatenation
+  ){ return true; }
+  return isInsideDisallowedBinaryExpression(node.parent);
+}
+
+export function isInsideLogicalExpressionLeft(node: WithParent<ESNode>): boolean {
+  if(!hasESNodeParentExtension(node)){ return false; }
+  if(node.parent.type === "LogicalExpression" && node.parent.left === node){ return true; }
+  return isInsideLogicalExpressionLeft(node.parent);
+}
+
+export function isInsideMemberExpression(node: WithParent<ESNode>): boolean {
+  // aka indexed access: https://github.com/estree/estree/blob/master/es5.md#memberexpression
+  if(!hasESNodeParentExtension(node)){ return false; }
+  if(node.parent.type === "MemberExpression"){ return true; }
+  return isInsideMemberExpression(node.parent);
+}
+
+export function isIndexedAccessLiteral(node: WithParent<ESNode>): boolean {
+  if(!hasESNodeParentExtension(node)){ return false; }
+  if(node.parent.type !== "MemberExpression"){ return false; }
+  return node.parent.property === node && isESSimpleStringLiteral(node);
+}

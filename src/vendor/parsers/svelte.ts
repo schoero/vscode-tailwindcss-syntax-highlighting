@@ -1,0 +1,309 @@
+import { getLiteralNodesByMatchers } from "../utils/matchers.js";
+import {
+  addAttribute,
+  deduplicateLiterals,
+  getContent,
+  getIndentation,
+  getNoConcatenation,
+  getNoPriorLiterals,
+  getQuotes,
+  getWhitespace,
+  matchesName
+} from "../utils/utils.js";
+import {
+  ES_CONTAINER_TYPES_TO_REPLACE_QUOTES,
+  getESMatcherFunctions,
+  getLiteralsByESLiteralNode,
+  hasESNodeParentExtension,
+  isESStringLike
+} from "./es.js";
+
+import type { BaseNode as ESBaseNode } from "estree";
+
+import type { BracesMeta, Literal, LiteralValueQuotes, MultilineMeta, StringLiteral } from "../types/ast.js";
+import type { Rule } from "../types/eslint.js";
+import type { AttributeSelector, MatcherFunctions, SelectorMatcher } from "../types/rule.js";
+import type {
+  SvelteAttachTag,
+  SvelteAttribute,
+  SvelteDirective,
+  SvelteGenericsDirective,
+  SvelteLiteral,
+  SvelteMustacheTagText,
+  SvelteName,
+  SvelteShorthandAttribute,
+  SvelteSpecialDirective,
+  SvelteSpreadAttribute,
+  SvelteStartTag,
+  SvelteStyleDirective
+} from "../types/svelte.js";
+
+
+export const SVELTE_CONTAINER_TYPES_TO_REPLACE_QUOTES = [
+  ...ES_CONTAINER_TYPES_TO_REPLACE_QUOTES,
+  "SvelteMustacheTag"
+];
+
+export const SVELTE_CONTAINER_TYPES_TO_INSERT_BRACES: string[] = [
+];
+
+
+export function getAttributesBySvelteTag(ctx: Rule.RuleContext, node: SvelteStartTag): SvelteAttribute[] {
+  return node.attributes.reduce<SvelteAttribute[]>((acc, attribute) => {
+    if(isSvelteAttribute(attribute)){
+      acc.push(attribute);
+    }
+    return acc;
+  }, []);
+}
+
+export function getDirectivesBySvelteTag(ctx: Rule.RuleContext, node: SvelteStartTag): SvelteDirective[] {
+  return node.attributes.reduce<SvelteDirective[]>((acc, attribute) => {
+    if(isSvelteDirective(attribute)){
+      acc.push(attribute);
+    }
+    return acc;
+  }, []);
+}
+
+export function getLiteralsBySvelteAttribute(ctx: Rule.RuleContext, attribute: SvelteAttribute, selectors: AttributeSelector[]): Literal[] {
+
+  // skip shorthand attributes #42
+  if(!Array.isArray(attribute.value)){
+    return [];
+  }
+
+  const name = attribute.key.name;
+
+  const literals = selectors.reduce<Literal[]>((literals, selector) => {
+
+    for(const value of attribute.value){
+      if(!matchesName(selector.name.toLowerCase(), name.toLowerCase())){ continue; }
+
+      if(!selector.match){
+        literals.push(...getLiteralsBySvelteLiteralNode(ctx, value));
+        continue;
+      }
+
+      literals.push(...getLiteralsBySvelteMatchers(ctx, value, selector.match));
+    }
+
+    return literals;
+  }, []);
+
+  return literals
+    .filter(deduplicateLiterals)
+    .map(addAttribute(name));
+
+}
+
+export function getLiteralsBySvelteDirective(ctx: Rule.RuleContext, directive: SvelteDirective, selectors: AttributeSelector[]): Literal[] {
+
+  if(directive.kind !== "Class"){
+    return [];
+  }
+
+  const name = `class:${directive.key.name.name}`;
+
+  const literals = selectors.reduce<Literal[]>((literals, selector) => {
+
+    if(!matchesName(selector.name.toLowerCase(), name.toLowerCase())){ return literals; }
+
+    if(!selector.match){
+      return literals;
+    }
+
+    literals.push(...getLiteralsBySvelteMatchers(ctx, directive.key.name, selector.match));
+
+    return literals;
+  }, []);
+
+  return literals
+    .filter(deduplicateLiterals)
+    .map(addAttribute(name));
+
+}
+
+function getLiteralsBySvelteMatchers(ctx: Rule.RuleContext, node: ESBaseNode, matchers: SelectorMatcher[]): Literal[] {
+  const matcherFunctions = getSvelteMatcherFunctions(matchers);
+
+  const literalNodes = getLiteralNodesByMatchers<ESBaseNode>(ctx, node, matcherFunctions);
+  const literals = literalNodes.flatMap(literalNode => getLiteralsBySvelteLiteralNode(ctx, literalNode));
+
+  return literals.filter(deduplicateLiterals);
+}
+
+function getLiteralsBySvelteLiteralNode(ctx: Rule.RuleContext, node: ESBaseNode): Literal[] {
+
+  if(isSvelteStringLiteral(node)){
+    const stringLiteral = getStringLiteralBySvelteStringLiteral(ctx, node);
+
+    if(stringLiteral){
+      return [stringLiteral];
+    }
+  }
+
+  if(isSvelteName(node)){
+    const stringLiteral = getStringLiteralBySvelteName(ctx, node);
+
+    if(stringLiteral){
+      return [stringLiteral];
+    }
+  }
+
+  if(isSvelteMustacheTag(node)){
+    return getLiteralsBySvelteLiteralNode(ctx, node.expression);
+  }
+
+  if(isESStringLike(node)){
+    return getLiteralsBySvelteESLiteralNode(ctx, node);
+  }
+
+  return [];
+
+}
+
+function getLiteralsBySvelteESLiteralNode(ctx: Rule.RuleContext, node: ESBaseNode): Literal[] {
+  const literals = getLiteralsByESLiteralNode(ctx, node);
+
+  return literals.map(literal => {
+    if(!hasESNodeParentExtension(node)){ return literal; }
+
+    const multilineQuotes = getMultilineQuotes(node);
+
+    return {
+      ...literal,
+      ...multilineQuotes
+    };
+  });
+}
+
+function getStringLiteralBySvelteName(ctx: Rule.RuleContext, node: SvelteName): StringLiteral {
+
+  const raw = node.name;
+
+  const braces = getBracesByString(ctx, raw);
+  const isInterpolated = getIsInterpolated(ctx, raw);
+  const quotes = getQuotes(raw);
+  const content = getContent(raw, quotes, braces);
+  const whitespaces = getWhitespace(content);
+  const line = ctx.sourceCode.lines[isInterpolated ? node.parent.loc.start.line - 1 : node.loc.start.line - 1];
+  const indentation = getIndentation(line);
+  const multilineQuotes = getMultilineQuotes(node);
+
+  return {
+    ...whitespaces,
+    ...quotes,
+    ...braces,
+    ...multilineQuotes,
+    content,
+    getConcatenation: getNoConcatenation,
+    getPriorLiterals: getNoPriorLiterals,
+    indentation,
+    isInterpolated,
+    loc: node.loc,
+    range: node.range, // include quotes in range
+    raw,
+    supportsMultiline: false,
+    type: "StringLiteral"
+  };
+
+}
+
+function getStringLiteralBySvelteStringLiteral(ctx: Rule.RuleContext, node: SvelteLiteral): StringLiteral | undefined {
+
+  const raw = ctx.sourceCode.getText(node, 1, 1);
+
+  const braces = getBracesByString(ctx, raw);
+  const isInterpolated = getIsInterpolated(ctx, raw);
+  const quotes = getQuotes(raw);
+  const content = getContent(raw, quotes, braces);
+  const whitespaces = getWhitespace(content);
+  const line = ctx.sourceCode.lines[isInterpolated ? node.parent.loc.start.line - 1 : node.loc.start.line - 1];
+  const indentation = getIndentation(line);
+  const multilineQuotes = getMultilineQuotes(node);
+
+  return {
+    ...whitespaces,
+    ...quotes,
+    ...braces,
+    ...multilineQuotes,
+    content,
+    getConcatenation: getNoConcatenation,
+    getPriorLiterals: getNoPriorLiterals,
+    indentation,
+    isInterpolated,
+    loc: node.loc,
+    range: [node.range[0] - 1, node.range[1] + 1], // include quotes in range
+    raw,
+    supportsMultiline: true,
+    type: "StringLiteral"
+  };
+
+}
+
+function getBracesByString(ctx: Rule.RuleContext, raw: string): BracesMeta {
+  const closingBraces = raw.trim().startsWith("}") ? "}" : undefined;
+  const openingTemplateBraces = raw.trim().endsWith("${") ? "${" : undefined;
+  const openingBrace = raw.trim().endsWith("{") ? "{" : undefined;
+  const openingBraces = openingTemplateBraces ?? openingBrace;
+
+  return {
+    closingBraces,
+    openingBraces
+  };
+}
+
+function getIsInterpolated(ctx: Rule.RuleContext, raw: string): boolean {
+  const braces = getBracesByString(ctx, raw);
+  return !!braces.closingBraces || !!braces.openingBraces;
+}
+
+function getMultilineQuotes(node: ESBaseNode & Rule.NodeParentExtension | SvelteLiteral | SvelteName): MultilineMeta {
+  const surroundingBraces = SVELTE_CONTAINER_TYPES_TO_INSERT_BRACES.includes(node.parent.type);
+  const multilineQuotes: LiteralValueQuotes[] = SVELTE_CONTAINER_TYPES_TO_REPLACE_QUOTES.includes(node.parent.type)
+    ? ["'", "\"", "`"]
+    : [];
+
+  return {
+    multilineQuotes,
+    surroundingBraces
+  };
+}
+
+function isSvelteAttribute(node:
+  | SvelteAttachTag
+  | SvelteAttribute
+  | SvelteDirective
+  | SvelteGenericsDirective
+  | SvelteShorthandAttribute
+  | SvelteSpecialDirective
+  | SvelteSpreadAttribute
+  | SvelteStyleDirective): node is SvelteAttribute {
+  return node.type === "SvelteAttribute";
+}
+
+function isSvelteDirective(node: ESBaseNode): node is SvelteDirective {
+  return node.type === "SvelteDirective";
+}
+
+function isSvelteStringLiteral(node: ESBaseNode): node is SvelteLiteral {
+  return node.type === "SvelteLiteral";
+}
+
+function isSvelteName(node: ESBaseNode): node is SvelteName {
+  return node.type === "SvelteName";
+}
+
+function isSvelteMustacheTag(node: ESBaseNode): node is SvelteMustacheTagText {
+  return node.type === "SvelteMustacheTag" &&
+    "kind" in node && node.kind === "text";
+}
+
+function getSvelteMatcherFunctions(matchers: SelectorMatcher[]): MatcherFunctions {
+  return getESMatcherFunctions(matchers, {
+    isStringLikeNode(node) {
+      return isSvelteName(node) || isSvelteStringLiteral(node);
+    }
+  });
+}

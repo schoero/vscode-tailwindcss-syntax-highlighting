@@ -25,7 +25,7 @@
 <br/>
 
 <div align="center">
-  VSCode extension that adds syntax highlighting for tailwindcss classes in HTML, JSX, TSX and Svelte files.
+  VSCode extension that adds syntax highlighting for tailwindcss classes in HTML, JSX, TSX, Svelte, Vue and CSS files.
 </div>
 
 <br/>
@@ -56,166 +56,139 @@
 <br/>
 <br/>
 
-### Customization
+### Classes in function calls, variables and tagged templates
 
-The colors of the syntax highlighting should in most cases be customized in the user settings of vscode. To open the user settings you can open the command palette with
-<kbd>F1</kbd> and search for `Preferences: Open User Settings (JSON)`.  
-  
-You can use the `Developer: Inspect Editor Tokens and Scopes` command from the command palette in vscode to find out the scope of a specific token.  
-For custom styling you should always use the `*.custom.tailwindcss` scope.
+Besides `class` and `className` attributes, the extension also highlights classes in
 
-<br/>
-<br/>
+- calls of utilities like `cn()`, `clsx()`, `cx()`, `cc()`, `twMerge()`, `twJoin()`, `ctl()`, `objstr()`, `cnb()`, `dcnb()`, `clb()`, `cva()` and `tv()`
+- variables named `className`, `classNames`, `classes`, `style` or `styles`
+- `twc` and `twx` tagged templates of [twc](https://github.com/gregberge/twc)
+- expressions in `class` and `className` attributes, like `className={isActive ? "font-bold" : "font-normal"}`
+- `class:` directives in Svelte, like `class:font-bold={isActive}`
+- bound classes in Vue, like `:class="{ 'font-bold': isActive }"`
+- inline `<script>` tags in HTML
+- `@apply` rules in CSS, SCSS, Less and PostCSS files, and in `<style>` tags of HTML, Svelte and Vue files
+
+Only strings that end up as classes are highlighted. Strings in comparisons, in the condition of a ternary, on the left side of `&&` and `||`, in object values of `cn()` and similar calls, or in nested function calls are ignored.
+
+```tsx
+cn(
+  variant === "primary" && "bg-blue-500", // "primary" is ignored, "bg-blue-500" is highlighted
+  { "font-bold": isActive }               // "font-bold" is highlighted
+);
+```
+
+The strings are found with the same matchers as in [eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss).
+
+In HTML, attribute values are plain strings, so attribute selectors only apply to them when they have no `match`, like the default `class` selector.
+
+#### Configuration
+
+| Setting | Description |
+| --- | --- |
+| `tailwindcssSyntaxHighlighting.enabled` | Turns the highlighting on or off. |
+| `tailwindcssSyntaxHighlighting.selectors` | Selectors that decide which strings are highlighted, in the same format as the [`selectors` option](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/settings/settings.md#selectors) of the ESLint plugin. |
+
+Like in the ESLint plugin, `tailwindcssSyntaxHighlighting.selectors` replaces the default selectors. Its default value is the full list of default selectors, which VS Code shows when you edit the setting in `settings.json`. Remove the entries you don't need and add your own.
+
+For example, to only highlight `cn()` calls and a custom `myUtility()` function:
 
 ```jsonc
 {
-  "editor.tokenColorCustomizations": {
-    "textMateRules": [
-      {
-        // tailwind classes
-        // hover:text-black-500
-        // ^^^^^^^^^^^^^^^^^^^^
-        "scope": "class.custom.tailwindcss",
-        "settings": {
-          "foreground": "#AFD9F8"
-        }
-      },
-      {
-        // tailwind variant modifier
-        // hover:text-black-500/10
-        // ^^^^^^
-        "scope": "variant.custom.tailwindcss",
-        "settings": {
-          "foreground": "#B583D3"
-        }
-      },
-      {
-        // the property name of a custom property
-        // hover:[top:_10px]
-        //        ^^^
-        "scope": "property-name.custom.tailwindcss",
-        "settings": {
-          "foreground": "#CA7979"
-        }
-      },
-      {
-        // the value of a custom property
-        // [top:_10px]
-        //      ^^^^^
-        "scope": "property-value.custom.tailwindcss",
-        "settings": {
-          "foreground": "#BABABA"
-        }
-      },
-      {
-        // numbers
-        // text-red-500 [top:_10px]
-        //          ^^^       ^^
-        "scope": "number.custom.tailwindcss",
-        "settings": {
-          "foreground": "#DDDBB4"
-        }
-      },
-      {
-        // units
-        // [top:_10px]
-        //         ^^
-        "scope": "unit.custom.tailwindcss",
-        "settings": {
-          "foreground": "#DDDBB4"
-        }
-      },
-      {
-        // square brackets
-        // w-[calc(100%_+_4px)]
-        //   ^                ^
-        "scope": "bracket.custom.tailwindcss",
-        "settings": {
-          "foreground": "#AFD9F8"
-        }
-      },
-      {
-        // css functions in custom properties
-        // w-[calc(100%_+_4px)]
-        //    ^^^^
-        "scope": "function.custom.tailwindcss",
-        "settings": {
-          "foreground": "#DDDBB4"
-        }
-      },
-      {
-        // round brackets
-        // w-[calc(100%_+_4px)]
-        //        ^          ^
-        "scope": "parenthesis.custom.tailwindcss",
-        "settings": {
-          "foreground": "#AFD9F8"
-        }
-      },
-      {
-        // operators
-        // w-[calc(100%_+_4px)] text-red-500/10
-        //              ^                   ^
-        "scope": "operator.custom.tailwindcss",
-        "settings": {
-          "foreground": "#BABABA"
-        }
-      },
-      {
-        // the important prefix
-        // !text-red-500
-        // ^
-        "scope": "important.custom.tailwindcss",
-        "settings": {
-          "foreground": "#BABABA"
-        }
-      },
-      {
-        // css selectors
-        // [&>div]:p-4
-        //  ^^
-        "scope": "selector.custom.tailwindcss",
-        "settings": {
-          "foreground": "#DDDBB4"
-        }
-      },
-      {
-        // tailwindcss whitespace substitute
-        // [top:_10px]
-        //      ^
-        "scope": "whitespace.custom.tailwindcss",
-        "settings": {
-          "foreground": "#CA797966"
-        }
-      },
-      {
-        // quoted strings
-        // before:content-['content']
-        //                 ^^^^^^^^^
-        "scope": "string.custom.tailwindcss",
-        "settings": {
-          "foreground": "#A6C088"
-        }
-      },
-      {
-        // css variables
-        // [top:_var(--my-var)]
-        //           ^^^^^^^^
-        "scope": "css-variable.custom.tailwindcss",
-        "settings": {
-          "foreground": "#CA7979"
-        }
-      },
-      {
-        // css currentColor
-        // [background-color:_currentColor]
-        //                    ^^^^^^^^^^^^
-        "scope": "current-color.custom.tailwindcss",
-        "settings": {
-          "foreground": "#80C4B2"
-        }
-      }
-    ]
+  "tailwindcssSyntaxHighlighting.selectors": [
+    {
+      "kind": "callee",
+      "name": "^cn$",
+      "match": [{ "type": "strings" }, { "type": "objectKeys" }]
+    },
+    {
+      "kind": "callee",
+      "name": "^myUtility$",
+      "match": [{ "type": "strings" }]
+    }
+  ]
+}
+```
+
+<br/>
+<br/>
+
+### Customization
+
+The colors can be customized in the user settings of vscode with `workbench.colorCustomizations`. To open the user settings you can open the command palette with
+<kbd>F1</kbd> and search for `Preferences: Open User Settings (JSON)`.
+
+```jsonc
+{
+  "workbench.colorCustomizations": {
+    // tailwind classes
+    // hover:text-black-500
+    //       ^^^^^^^^^^^
+    "tailwindcss.class": "#AFD9F8",
+    // tailwind variants
+    // hover:text-black-500/10
+    // ^^^^^^
+    "tailwindcss.variant": "#B583D3",
+    // the property name of an arbitrary property
+    // hover:[top:_10px]
+    //        ^^^
+    "tailwindcss.propertyName": "#CA7979",
+    // the value of an arbitrary property
+    // [top:_10px] bg-[#fff]
+    //                 ^^^^
+    "tailwindcss.propertyValue": "#BABABA",
+    // numbers
+    // text-red-500 [top:_10px]
+    //          ^^^       ^^
+    "tailwindcss.number": "#DDDBB4",
+    // units
+    // [top:_10px]
+    //         ^^
+    "tailwindcss.unit": "#DDDBB4",
+    // square brackets
+    // w-[calc(100%_+_4px)]
+    //   ^                ^
+    "tailwindcss.bracket": "#AFD9F8",
+    // css functions in arbitrary values
+    // w-[calc(100%_+_4px)]
+    //    ^^^^
+    "tailwindcss.function": "#DDDBB4",
+    // round brackets
+    // w-[calc(100%_+_4px)] bg-(--brand)
+    //        ^          ^     ^       ^
+    "tailwindcss.parenthesis": "#AFD9F8",
+    // operators and negative prefixes
+    // w-[calc(100%_+_4px)] text-red-500/10 -mt-2
+    //              ^                   ^   ^
+    "tailwindcss.operator": "#BABABA",
+    // the important modifier
+    // !text-red-500 text-red-500!
+    // ^                         ^
+    "tailwindcss.important": "#BABABA",
+    // css selectors in arbitrary variants
+    // [&>div]:p-4
+    //  ^^^^^
+    "tailwindcss.selector": "#DDDBB4",
+    // the tailwindcss whitespace substitute
+    // [top:_10px]
+    //      ^
+    "tailwindcss.whitespace": "#CA797966",
+    // quoted strings
+    // before:content-['content']
+    //                 ^^^^^^^^^
+    "tailwindcss.string": "#A6C088",
+    // css variables
+    // [top:_var(--my-var)]
+    //           ^^^^^^^^
+    "tailwindcss.cssVariable": "#CA7979",
+    // css currentColor
+    // [background-color:_currentColor]
+    //                    ^^^^^^^^^^^^
+    "tailwindcss.currentColor": "#80C4B2",
+    // commas and the colon of arbitrary properties
+    // [top:_10px] [margin:1px,2px]
+    //     ^              ^   ^
+    "tailwindcss.punctuation": "#BABABA"
   }
 }
 ```

@@ -1,9 +1,9 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "name": "vscode-tailwindcss-syntax-highlighting",
   "displayName": "Syntax Highlighting for Tailwind CSS",
-  "description": "Adds syntax highlighting for tailwindcss classes in html and jsx or tsx files.",
+  "description": "Adds syntax highlighting for tailwindcss classes in html, jsx, tsx, svelte, vue and css files, including classes inside cn, clsx, twMerge, cva, tv and @apply.",
   "license": "MIT",
   "author": "Roger Schönbächler",
   "homepage": "https://github.com/schoero/vscode-tailwindcss-syntax-highlighting#readme",
@@ -14,7 +14,9 @@
   "bugs": {
     "url": "https://github.com/schoero/vscode-tailwindcss-syntax-highlighting/issues"
   },
+  "main": "./dist/extension.js",
   "scripts": {
+    "build": "vite build",
     "eslint": "eslint .",
     "eslint:ci": "npm run eslint -- --max-warnings 0",
     "eslint:fix": "npm run eslint -- --fix",
@@ -30,18 +32,35 @@
     "release": "changelogen --bump --output",
     "spellcheck": "cspell lint",
     "spellcheck:ci": "npm run spellcheck -- --no-progress",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "watch": "tsc -w"
+    "vscode:prepublish": "npm run build",
+    "watch": "vite build --watch --mode development"
   },
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.101.0"
   },
   "devDependencies": {
-    "@schoero/configs": "^1.4.2",
-    "changelogen": "^0.6.1",
-    "cspell": "^9.0.2",
-    "eslint": "^9.27.0",
-    "markdownlint": "^0.38.0",
+    "@eslint/css-tree": "^4.1.2",
+    "@oxc-parser/binding-wasm32-wasip1": "^0.158.0",
+    "@schoero/configs": "^1.6.0",
+    "@types/estree": "^1.0.10",
+    "@types/estree-jsx": "^1.0.5",
+    "@types/node": "^22.20.5",
+    "@types/vscode": "1.101.0",
+    "@vue/compiler-dom": "^3.5.45",
+    "changelogen": "^0.6.2",
+    "cspell": "^10.4.1",
+    "es-html-parser": "^0.3.2",
+    "eslint": "^10.14.0",
+    "markdownlint": "^0.42.1",
+    "markdownlint-cli2": "^0.24.0",
+    "oxc-parser": "^0.158.0",
+    "svelte": "^5.57.3",
+    "tailwind-csstree": "^0.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0",
     "vsce": "^2.15.0"
   },
   "keywords": [
@@ -56,30 +75,875 @@
     "tsx",
     "html",
     "svelte",
+    "vue",
     "syntax",
     "highlighting"
   ],
   "volta": {
     "node": "22.7.0"
   },
+  "activationEvents": [
+    "onLanguage:css",
+    "onLanguage:html",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:less",
+    "onLanguage:postcss",
+    "onLanguage:scss",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:svelte",
+    "onLanguage:tailwindcss",
+    "onLanguage:vue"
+  ],
   "categories": [
     "Programming Languages"
   ],
   "contributes": {
-    "grammars": [
+    "colors": [
       {
-        "injectTo": [
-          "source.js",
-          "source.jsx",
-          "source.ts",
-          "source.tsx",
-          "source.svelte",
-          "text.html"
-        ],
-        "path": "./syntaxes/tailwindcss.tmLanguage.json",
-        "scopeName": "source.tailwindcss"
+        "defaults": {
+          "dark": "editor.foreground",
+          "highContrast": "editor.foreground",
+          "highContrastLight": "editor.foreground",
+          "light": "editor.foreground"
+        },
+        "description": "Color of square brackets of arbitrary values. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.bracket"
+      },
+      {
+        "defaults": {
+          "dark": "#9CDCFE",
+          "highContrast": "#9CDCFE",
+          "highContrastLight": "#E50000",
+          "light": "#E50000"
+        },
+        "description": "Color of Tailwind CSS class names. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.class"
+      },
+      {
+        "defaults": {
+          "dark": "#9CDCFE",
+          "highContrast": "#9CDCFE",
+          "highContrastLight": "#001080",
+          "light": "#001080"
+        },
+        "description": "Color of CSS variables in arbitrary values. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.cssVariable"
+      },
+      {
+        "defaults": {
+          "dark": "#CE9178",
+          "highContrast": "#CE9178",
+          "highContrastLight": "#0451A5",
+          "light": "#0451A5"
+        },
+        "description": "Color of color keywords like `currentColor` in arbitrary values. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.currentColor"
+      },
+      {
+        "defaults": {
+          "dark": "#DCDCAA",
+          "highContrast": "#DCDCAA",
+          "highContrastLight": "#795E26",
+          "light": "#795E26"
+        },
+        "description": "Color of CSS functions in arbitrary values. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.function"
+      },
+      {
+        "defaults": {
+          "dark": "#569CD6",
+          "highContrast": "#569CD6",
+          "highContrastLight": "#0000FF",
+          "light": "#0000FF"
+        },
+        "description": "Color of the important modifier `!`. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.important"
+      },
+      {
+        "defaults": {
+          "dark": "#B5CEA8",
+          "highContrast": "#B5CEA8",
+          "highContrastLight": "#098658",
+          "light": "#098658"
+        },
+        "description": "Color of numbers in class names. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.number"
+      },
+      {
+        "defaults": {
+          "dark": "#D4D4D4",
+          "highContrast": "#D4D4D4",
+          "highContrastLight": "#000000",
+          "light": "#000000"
+        },
+        "description": "Color of negative prefixes, slashes and arithmetic operators. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.operator"
+      },
+      {
+        "defaults": {
+          "dark": "editor.foreground",
+          "highContrast": "editor.foreground",
+          "highContrastLight": "editor.foreground",
+          "light": "editor.foreground"
+        },
+        "description": "Color of parentheses in arbitrary values. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.parenthesis"
+      },
+      {
+        "defaults": {
+          "dark": "#9CDCFE",
+          "highContrast": "#9CDCFE",
+          "highContrastLight": "#E50000",
+          "light": "#E50000"
+        },
+        "description": "Color of CSS property names in arbitrary properties. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.propertyName"
+      },
+      {
+        "defaults": {
+          "dark": "#CE9178",
+          "highContrast": "#CE9178",
+          "highContrastLight": "#0451A5",
+          "light": "#0451A5"
+        },
+        "description": "Color of CSS property values in arbitrary properties. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.propertyValue"
+      },
+      {
+        "defaults": {
+          "dark": "editor.foreground",
+          "highContrast": "editor.foreground",
+          "highContrastLight": "editor.foreground",
+          "light": "editor.foreground"
+        },
+        "description": "Color of commas and the colon of arbitrary properties. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.punctuation"
+      },
+      {
+        "defaults": {
+          "dark": "#D7BA7D",
+          "highContrast": "#D7BA7D",
+          "highContrastLight": "#800000",
+          "light": "#800000"
+        },
+        "description": "Color of selectors and combinators in arbitrary variants. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.selector"
+      },
+      {
+        "defaults": {
+          "dark": "#CE9178",
+          "highContrast": "#CE9178",
+          "highContrastLight": "#A31515",
+          "light": "#A31515"
+        },
+        "description": "Color of quoted strings in arbitrary values. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.string"
+      },
+      {
+        "defaults": {
+          "dark": "#B5CEA8",
+          "highContrast": "#B5CEA8",
+          "highContrastLight": "#098658",
+          "light": "#098658"
+        },
+        "description": "Color of units of numbers in arbitrary values. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.unit"
+      },
+      {
+        "defaults": {
+          "dark": "#C586C0",
+          "highContrast": "#C586C0",
+          "highContrastLight": "#AF00DB",
+          "light": "#AF00DB"
+        },
+        "description": "Color of variants like `hover:` or `md:`. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.variant"
+      },
+      {
+        "defaults": {
+          "dark": "editor.foreground",
+          "highContrast": "editor.foreground",
+          "highContrastLight": "editor.foreground",
+          "light": "editor.foreground"
+        },
+        "description": "Color of underscores used as whitespace in arbitrary values. Only applies to classes highlighted by the extension code, for example in `cn()` calls.",
+        "id": "tailwindcss.whitespace"
       }
-    ]
+    ],
+    "configuration": {
+      "properties": {
+        "tailwindcssSyntaxHighlighting.enabled": {
+          "default": true,
+          "markdownDescription": "Highlight classes as configured by `#tailwindcssSyntaxHighlighting.selectors#`.",
+          "order": 0,
+          "type": "boolean"
+        },
+        "tailwindcssSyntaxHighlighting.selectors": {
+          "default": [
+            {
+              "kind": "attribute",
+              "name": "^class(?:Name)?$"
+            },
+            {
+              "kind": "attribute",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^class(?:Name)?$"
+            },
+            {
+              "kind": "attribute",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^class:.*$"
+            },
+            {
+              "kind": "attribute",
+              "name": "(?:^\\[class\\]$)|(?:^\\[ngClass\\]$)"
+            },
+            {
+              "kind": "attribute",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "(?:^\\[class\\..*\\]$)"
+            },
+            {
+              "kind": "attribute",
+              "match": [
+                {
+                  "type": "strings"
+                },
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "(?:^\\[class\\]$)|(?:^\\[ngClass\\]$)"
+            },
+            {
+              "kind": "attribute",
+              "match": [
+                {
+                  "type": "strings"
+                },
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^v-bind:class$"
+            },
+            {
+              "kind": "attribute",
+              "match": [
+                {
+                  "type": "strings"
+                },
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^class:list$"
+            },
+            {
+              "kind": "attribute",
+              "match": [
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^classList$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^cc$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^cc$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^base$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^clb$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^variants.*$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^clb$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^compoundVariants\\[\\d+\\]\\.classes$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^clb$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^clsx$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^clsx$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^cn$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^cn$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^cnb$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^cnb$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^ctl$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^cva$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^variants.*$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^cva$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^compoundVariants\\[\\d+\\]\\.(?:className|class)$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^cva$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^cx$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^cx$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^dcnb$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^dcnb$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "objectKeys"
+                }
+              ],
+              "name": "^objstr$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^tv$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^variants.*$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^tv$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^compoundVariants\\[\\d+\\]\\.(?:className|class).*$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^tv$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^base$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^tv$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^slots.*$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^tv$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "path": "^compoundSlots\\[\\d+\\]\\.(?:className|class).*$",
+                  "type": "objectValues"
+                }
+              ],
+              "name": "^tv$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^twJoin$"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^twMerge$"
+            },
+            {
+              "kind": "variable",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^classNames?$"
+            },
+            {
+              "kind": "variable",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^classes$"
+            },
+            {
+              "kind": "variable",
+              "match": [
+                {
+                  "type": "strings"
+                }
+              ],
+              "name": "^styles?$"
+            },
+            {
+              "kind": "tag",
+              "path": "twc(\\.\\w+)?"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                },
+                {
+                  "match": [
+                    {
+                      "type": "strings"
+                    }
+                  ],
+                  "type": "anonymousFunctionReturn"
+                }
+              ],
+              "path": "^twc\\.\\w+"
+            },
+            {
+              "kind": "tag",
+              "path": "twx(\\.\\w+)?"
+            },
+            {
+              "kind": "callee",
+              "match": [
+                {
+                  "type": "strings"
+                },
+                {
+                  "match": [
+                    {
+                      "type": "strings"
+                    }
+                  ],
+                  "type": "anonymousFunctionReturn"
+                }
+              ],
+              "path": "^twx\\.\\w+"
+            }
+          ],
+          "items": {
+            "additionalProperties": false,
+            "anyOf": [
+              {
+                "required": [
+                  "name"
+                ]
+              },
+              {
+                "required": [
+                  "path"
+                ]
+              }
+            ],
+            "defaultSnippets": [
+              {
+                "body": {
+                  "kind": "callee",
+                  "match": [
+                    {
+                      "type": "strings"
+                    }
+                  ],
+                  "name": "^${1:myUtility}$"
+                },
+                "label": "Callee"
+              },
+              {
+                "body": {
+                  "kind": "variable",
+                  "match": [
+                    {
+                      "type": "strings"
+                    }
+                  ],
+                  "name": "^${1:myClasses}$"
+                },
+                "label": "Variable"
+              },
+              {
+                "body": {
+                  "kind": "attribute",
+                  "match": [
+                    {
+                      "type": "strings"
+                    }
+                  ],
+                  "name": "^${1:myClass}$"
+                },
+                "label": "Attribute"
+              },
+              {
+                "body": {
+                  "kind": "tag",
+                  "path": "^${1:myTag}$"
+                },
+                "label": "Tagged template"
+              }
+            ],
+            "properties": {
+              "kind": {
+                "description": "Where the selector applies.",
+                "enum": [
+                  "attribute",
+                  "callee",
+                  "tag",
+                  "variable"
+                ],
+                "enumDescriptions": [
+                  "JSX and Svelte attributes, matched by `name`.",
+                  "Function calls, matched by `name` (`cn`) or `path` (`utils.cn`).",
+                  "Tagged template literals, matched by `name` or `path`.",
+                  "Variable declarations, matched by `name`."
+                ]
+              },
+              "match": {
+                "description": "Matchers that select the strings inside the matched node. Without matchers, only a string passed directly is matched.",
+                "items": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "type": {
+                          "const": "strings",
+                          "description": "Matches all strings that are not matched by another matcher."
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                          "type": "string"
+                        },
+                        "type": {
+                          "const": "objectKeys",
+                          "description": "Matches object keys."
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                          "type": "string"
+                        },
+                        "type": {
+                          "const": "objectValues",
+                          "description": "Matches string object values."
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "match": {
+                          "description": "Matchers applied to the return value of anonymous functions.",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "type": {
+                                    "const": "strings",
+                                    "description": "Matches all strings that are not matched by another matcher."
+                                  }
+                                },
+                                "required": [
+                                  "type"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "path": {
+                                    "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "objectKeys",
+                                    "description": "Matches object keys."
+                                  }
+                                },
+                                "required": [
+                                  "type"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "path": {
+                                    "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "objectValues",
+                                    "description": "Matches string object values."
+                                  }
+                                },
+                                "required": [
+                                  "type"
+                                ],
+                                "type": "object"
+                              }
+                            ]
+                          },
+                          "type": "array"
+                        },
+                        "type": {
+                          "const": "anonymousFunctionReturn",
+                          "description": "Matches the return value of anonymous functions with nested matchers."
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "match"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              "name": {
+                "description": "Regular expression that must match the whole name, for example `^cn$`.",
+                "type": "string"
+              },
+              "path": {
+                "description": "Regular expression that must match the whole path of a callee or tag, for example `^styled\\.\\w+$`.",
+                "type": "string"
+              },
+              "targetArgument": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "all",
+                      "first",
+                      "last"
+                    ]
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "description": "Which arguments of the call are matched: an index, `first`, `last` or `all` (default)."
+              },
+              "targetCall": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "all",
+                      "first",
+                      "last"
+                    ]
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "description": "Which call of a curried callee is matched: an index, `first` (default), `last` or `all`."
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "type": "object"
+          },
+          "markdownDescription": "Selectors that decide which strings are highlighted, in the same format as the [`selectors` option of eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/settings/settings.md#selectors). Setting it replaces the defaults, so remove the entries you don't want and add your own.",
+          "order": 1,
+          "type": "array"
+        }
+      },
+      "title": "Tailwind CSS Syntax Highlighting"
+    }
   },
   "icon": "assets/icon.png",
   "publisher": "schoero"

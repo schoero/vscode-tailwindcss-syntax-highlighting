@@ -7,12 +7,11 @@
         "isDefault": true,
         "kind": "build"
       },
-      "isBackground": true,
       "presentation": {
-        "reveal": "never"
+        "reveal": "silent"
       },
-      "problemMatcher": "$tsc-watch",
-      "script": "watch",
+      "problemMatcher": [],
+      "script": "build",
       "type": "npm"
     }
   ],
