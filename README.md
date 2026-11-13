@@ -54,63 +54,6 @@
 <br/>
 <br/>
 
-### Classes in function calls, variables and tagged templates
-
-Besides `class` and `className` attributes, the extension also highlights classes in
-
-- calls of utilities like `cn()`, `clsx()`, `cx()`, `cc()`, `twMerge()`, `twJoin()`, `ctl()`, `objstr()`, `cnb()`, `dcnb()`, `clb()`, `cva()` and `tv()`
-- variables named `className`, `classNames`, `classes`, `style` or `styles`
-- `twc` and `twx` tagged templates of [twc](https://github.com/gregberge/twc)
-- expressions in `class` and `className` attributes, like `className={isActive ? "font-bold" : "font-normal"}`
-- `class:` directives in Svelte, like `class:font-bold={isActive}`
-- bound classes in Vue, like `:class="{ 'font-bold': isActive }"`
-- inline `<script>` tags in HTML
-- `@apply` rules in CSS, SCSS, Less and PostCSS files, and in `<style>` tags of HTML, Svelte and Vue files
-
-Only strings that end up as classes are highlighted. Strings in comparisons, in the condition of a ternary, on the left side of `&&` and `||`, in object values of `cn()` and similar calls, or in nested function calls are ignored.
-
-```tsx
-cn(
-  variant === "primary" && "bg-blue-500", // "primary" is ignored, "bg-blue-500" is highlighted
-  { "font-bold": isActive }               // "font-bold" is highlighted
-);
-```
-
-The strings are found with the same matchers as in [eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss).
-
-In HTML, attribute values are plain strings, so attribute selectors only apply to them when they have no `match`, like the default `class` selector.
-
-#### Configuration
-
-| Setting | Description |
-| --- | --- |
-| `tailwindcssSyntaxHighlighting.enabled` | Turns the highlighting on or off. |
-| `tailwindcssSyntaxHighlighting.selectors` | Selectors that decide which strings are highlighted, in the same format as the [`selectors` option](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/settings/settings.md#selectors) of the ESLint plugin. |
-
-Like in the ESLint plugin, `tailwindcssSyntaxHighlighting.selectors` replaces the default selectors. Its default value is the full list of default selectors, which VS Code shows when you edit the setting in `settings.json`. Remove the entries you don't need and add your own.
-
-For example, to only highlight `cn()` calls and a custom `myUtility()` function:
-
-```jsonc
-{
-  "tailwindcssSyntaxHighlighting.selectors": [
-    {
-      "kind": "callee",
-      "name": "^cn$",
-      "match": [{ "type": "strings" }, { "type": "objectKeys" }]
-    },
-    {
-      "kind": "callee",
-      "name": "^myUtility$",
-      "match": [{ "type": "strings" }]
-    }
-  ]
-}
-```
-
-<br/>
-<br/>
-
 ### Customization
 
 The colors can be customized in the user settings of vscode with `workbench.colorCustomizations`. To open the user settings you can open the command palette with
@@ -190,6 +133,61 @@ The colors can be customized in the user settings of vscode with `workbench.colo
   }
 }
 ```
+
+<br/>
+<br/>
+
+### Configuration
+
+| Setting | Description |
+| --- | --- |
+| `tailwindcssSyntaxHighlighting.enabled` | Turns the highlighting on or off. |
+| `tailwindcssSyntaxHighlighting.selectors` | Selectors that decide which strings are highlighted. |
+
+The strings are found with the same matchers as in [eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss). The selectors also use the same format as the plugin's `selectors` option, so you can copy them from your ESLint config.
+
+Setting `tailwindcssSyntaxHighlighting.selectors` replaces the default selectors instead of extending them. Its default value is the full list of default selectors, which VS Code shows when you edit the setting in `settings.json`. Remove the entries you don't need and add your own.
+
+For example, to only highlight `cn()` calls and a custom `myUtility()` function:
+
+```jsonc
+{
+  "tailwindcssSyntaxHighlighting.selectors": [
+    {
+      "kind": "callee",
+      "name": "^cn$",
+      "match": [{ "type": "strings" }, { "type": "objectKeys" }]
+    },
+    {
+      "kind": "callee",
+      "name": "^myUtility$",
+      "match": [{ "type": "strings" }]
+    }
+  ]
+}
+```
+
+#### Selector properties
+
+| Property | Description |
+| --- | --- |
+| `kind` | Where the selector applies: `attribute` for attributes, `callee` for function calls, `variable` for variable declarations or `tag` for tagged templates. |
+| `name` | Regular expression that must match the whole name, for example `^cn$`. |
+| `path` | Used instead of `name`. Regular expression that must match the whole path of a callee or tag, for example `^utils\.cn$` or `^styled\.\w+$`. |
+| `match` | Matchers that select the strings inside the matched node. Without matchers, only a string passed directly is highlighted. |
+| `targetArgument` | Only for `callee`. Which arguments of the call are matched: an index, `first`, `last` or `all` (default). |
+| `targetCall` | Only for `callee`. Which call of a curried callee is matched: an index, `first` (default), `last` or `all`. |
+
+#### Matchers
+
+| Matcher | Description |
+| --- | --- |
+| `{ "type": "strings" }` | Matches all strings that are not matched by another matcher. |
+| `{ "type": "objectKeys", "path": "…" }` | Matches object keys. The optional `path` is a regular expression for the object path, for example `^variants.*$`. |
+| `{ "type": "objectValues", "path": "…" }` | Matches string object values. The optional `path` works like for `objectKeys`, for example `^compoundVariants\[\d+\]\.class$`. |
+| `{ "type": "anonymousFunctionReturn", "match": […] }` | Applies the nested matchers to the return value of anonymous functions. |
+
+HTML attribute values are plain strings, not expressions. In HTML files, attribute selectors therefore only apply when they have no `match`, like the default `class` selector.
 
 <br/>
 <br/>
