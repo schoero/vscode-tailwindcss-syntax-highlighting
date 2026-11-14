@@ -7,8 +7,8 @@ import { getClassRanges } from "./highlight.js";
 import { DEFAULT_SELECTORS } from "./vendor/options/default-options.js";
 
 
-function getClasses(code: string, setting: unknown) {
-  const ranges = getClassRanges("typescriptreact", code, resolveSelectors(setting).selectors);
+async function getClasses(code: string, setting: unknown) {
+  const ranges = await getClassRanges("typescriptreact", code, resolveSelectors(setting).selectors);
   if(!ranges){ throw new Error("could not parse"); }
   return ranges.map(range => code.slice(range.start, range.end));
 }
@@ -25,16 +25,16 @@ describe("resolveSelectors", () => {
     expect(setting.default).toEqual(JSON.parse(JSON.stringify(DEFAULT_SELECTORS)));
   });
 
-  it("should replace the default selectors", () => {
+  it("should replace the default selectors", async () => {
     const code = "myUtility(\"p-2\", a === \"b\" && \"m-2\"); cn(\"flex\")";
     const setting = [{ kind: "callee", match: [{ type: "strings" }], name: "^myUtility$" }];
-    expect(getClasses(code, setting)).toEqual(["p-2", "m-2"]);
+    expect(await getClasses(code, setting)).toEqual(["p-2", "m-2"]);
   });
 
-  it("should support selectors with paths and object matchers", () => {
+  it("should support selectors with paths and object matchers", async () => {
     const code = "styles.create({ base: \"p-2\", ignored: 1, variants: { size: { sm: \"m-2\" } } })";
     const setting = [{ kind: "callee", match: [{ path: "^variants.*$", type: "objectValues" }], path: "^styles\\.create$" }];
-    expect(getClasses(code, setting)).toEqual(["m-2"]);
+    expect(await getClasses(code, setting)).toEqual(["m-2"]);
   });
 
   it("should skip invalid selectors and report them", () => {

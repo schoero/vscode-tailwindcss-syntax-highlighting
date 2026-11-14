@@ -34,9 +34,9 @@ const fixtures: [name: string, selector: Selector, code: string][] = [
 
 describe("upstream callee fixtures", () => {
 
-  it.each(fixtures)("%s", (_, selector, code) => {
+  it.each(fixtures)("%s", async (_, selector, code) => {
     for(const [languageId, source] of [["typescriptreact", code], ["svelte", `<script>${code}</script>`], ["html", `<script>${code}</script>`]] as const){
-      const ranges = getClassRanges(languageId, source, [selector]);
+      const ranges = await getClassRanges(languageId, source, [selector]);
       if(!ranges){ throw new Error("could not parse"); }
 
       const matched = ranges.map(range => source.slice(range.start, range.end));

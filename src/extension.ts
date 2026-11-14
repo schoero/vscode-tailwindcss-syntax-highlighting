@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed
   })] as const);
 
-  const cache = new Map<vscode.TextDocument, { tokens: TokenRanges; version: number; }>();
+  const cache = new Map<vscode.TextDocument, { tokens: Promise<TokenRanges | undefined>; version: number; }>();
   const timers = new Map<vscode.TextDocument, NodeJS.Timeout>();
 
   let settings: Settings;
@@ -36,32 +36,45 @@ export function activate(context: vscode.ExtensionContext) {
     }
   };
 
-  const getTokens = (document: vscode.TextDocument): TokenRanges | undefined => {
+  const getTokens = (document: vscode.TextDocument) => {
     const cached = cache.get(document);
-    if(cached?.version === document.version){ return cached.tokens; }
+    if(cached?.version === document.version){ return cached; }
 
-    const highlighted = highlight(document.languageId, document.getText(), settings.selectors);
-    if(!highlighted){ return; }
+    const parsedVersion = document.version;
 
-    const tokens = toRanges(document, highlighted);
-    cache.set(document, { tokens, version: document.version });
-    return tokens;
+    const tokens = (async () => {
+      try {
+        const highlighted = await highlight(document.languageId, document.getText(), settings.selectors);
+        // The offsets only fit the text they were computed from.
+        if(highlighted && document.version === parsedVersion){ return toRanges(document, highlighted); }
+      } catch (error){
+        console.error("[tailwindcss-syntax-highlighting]", error);
+      }
+    })();
+
+    const entry = { tokens, version: parsedVersion };
+    cache.set(document, entry);
+    return entry;
   };
 
-  const decorate = (editor: vscode.TextEditor) => {
-    if(!SUPPORTED_LANGUAGE_IDS.includes(editor.document.languageId)){ return; }
+  const decorate = async (editor: vscode.TextEditor) => {
+    const { document } = editor;
+    if(!SUPPORTED_LANGUAGE_IDS.includes(document.languageId)){ return; }
 
     let tokens: TokenRanges | undefined;
 
-    try {
-      tokens = settings.enabled ? getTokens(editor.document) : undefined;
-    } catch (error){
-      console.error("[tailwindcss-syntax-highlighting]", error);
-    }
+    if(settings.enabled){
+      const entry = getTokens(document);
+      tokens = await entry.tokens;
 
-    // Syntax errors are common while typing. The previous decorations stay in place and move
-    // with the edits, which looks better than clearing them until the code parses again.
-    if(settings.enabled && !tokens){ return; }
+      // While a parser was loading, the document may have been edited or closed, or the settings
+      // reloaded. A newer call takes care of those, and this result would be wrong.
+      if(cache.get(document) !== entry || document.version !== entry.version){ return; }
+
+      // Syntax errors are common while typing. The previous decorations stay in place and move
+      // with the edits, which looks better than clearing them until the code parses again.
+      if(!tokens){ return; }
+    }
 
     for(const [kind, decorationType] of decorationTypes){
       editor.setDecorations(decorationType, tokens?.[kind] ?? []);
@@ -70,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const decorateVisibleEditors = (document?: vscode.TextDocument) => {
     for(const editor of vscode.window.visibleTextEditors){
-      if(!document || editor.document === document){ decorate(editor); }
+      if(!document || editor.document === document){ void decorate(editor); }
     }
   };
 
@@ -79,7 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     ...decorationTypes.map(([, decorationType]) => decorationType),
-    vscode.window.onDidChangeVisibleTextEditors(editors => editors.forEach(decorate)),
+    vscode.window.onDidChangeVisibleTextEditors(editors => editors.forEach(editor => void decorate(editor))),
     vscode.workspace.onDidChangeTextDocument(({ contentChanges, document }) => {
       if(contentChanges.length === 0){ return; }
       clearTimeout(timers.get(document));

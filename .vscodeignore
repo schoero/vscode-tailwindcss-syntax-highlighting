@@ -1,5 +1,5 @@
 **
-!dist/extension.js
+!dist/*.js
 !dist/parser.wasm32-wasip1.wasm
 !assets/icon.png
 !package.json

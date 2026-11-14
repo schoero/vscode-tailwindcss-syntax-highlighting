@@ -1,9 +1,4 @@
-import { parseCss } from "./css.js";
-import { parseScript } from "./es.js";
-import { parseHtml } from "./html.js";
 import { prepareScripts } from "./prepare.js";
-import { parseSvelteMarkup } from "./svelte.js";
-import { parseVueTemplate } from "./vue.js";
 
 import type { Lang, ParsedScript } from "./es.js";
 import type { PreparedScript } from "./prepare.js";
@@ -21,25 +16,36 @@ const CSS_LANGUAGE_IDS = ["css", "less", "postcss", "scss", "tailwindcss"];
 
 export const SUPPORTED_LANGUAGE_IDS = [...Object.keys(LANGS), ...CSS_LANGUAGE_IDS, "html", "svelte", "vue"];
 
+// Each parser is loaded on first use, because together they make up most of the bundle and a
+// workspace usually only needs a few of them.
+const loadCss = async () => import("./css.js");
+const loadEs = async () => import("./es.js");
+const loadHtml = async () => import("./html.js");
+const loadSvelte = async () => import("./svelte.js");
+const loadVue = async () => import("./vue.js");
+
 // Returns `undefined` if anything could not be parsed,
 // so callers can keep showing the previous result while the user is in the middle of typing.
-export function parseDocument(languageId: string, text: string): PreparedScript[] | undefined {
-  const parsed = parseParts(languageId, text);
+export async function parseDocument(languageId: string, text: string): Promise<PreparedScript[] | undefined> {
+  const parsed = await parseParts(languageId, text);
   if(!parsed?.every(script => script !== undefined)){ return; }
 
   return prepareScripts(text, parsed);
 }
 
-function parseParts(languageId: string, text: string): (ParsedScript | undefined)[] | undefined {
+async function parseParts(languageId: string, text: string): Promise<(ParsedScript | undefined)[] | undefined> {
   if(languageId in LANGS){
+    const { parseScript } = await loadEs();
     return [parseScript(LANGS[languageId], text, 0)];
   }
 
   if(CSS_LANGUAGE_IDS.includes(languageId)){
+    const { parseCss } = await loadCss();
     return [parseCss(text, 0)];
   }
 
   if(languageId === "html"){
+    const [{ parseHtml }, { parseScript }, { parseCss }] = await Promise.all([loadHtml(), loadEs(), loadCss()]);
     const html = parseHtml(text);
     return html && [
       ...html.scripts.map(script => parseScript("js", script.content, script.offset)),
@@ -52,15 +58,21 @@ function parseParts(languageId: string, text: string): (ParsedScript | undefined
     return [];
   }
 
+  const [{ parseScript }, { parseCss }] = await Promise.all([loadEs(), loadCss()]);
+
   const blocks = getScriptBlocks(text);
   const scripts = blocks.map(block => parseScript(block.lang, block.content, block.offset));
   const styles = getStyleBlocks(text).map(block => parseCss(block.content, block.offset));
 
-  const markup = languageId === "svelte"
-    ? parseSvelteMarkup(text)
-    : parseVueTemplate(text, blocks.some(block => block.lang === "ts" || block.lang === "tsx") ? "ts" : "js");
+  if(languageId === "svelte"){
+    const { parseSvelteMarkup } = await loadSvelte();
+    return [...scripts, ...styles, parseSvelteMarkup(text)];
+  }
 
-  return [...scripts, ...styles, markup];
+  const { parseVueTemplate } = await loadVue();
+  const lang = blocks.some(block => block.lang === "ts" || block.lang === "tsx") ? "ts" : "js";
+
+  return [...scripts, ...styles, parseVueTemplate(text, lang)];
 }
 
 function getScriptBlocks(text: string) {
