@@ -146,9 +146,23 @@ The colors can be customized in the user settings of vscode with `workbench.colo
 
 The strings are found with the same matchers as in [eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss). The selectors also use the same format as the plugin's `selectors` option, so you can copy them from your ESLint config.
 
-Setting `tailwindcssSyntaxHighlighting.selectors` replaces the default selectors instead of extending them. Its default value is the full list of default selectors, which VS Code shows when you edit the setting in `settings.json`. Remove the entries you don't need and add your own.
+Without the setting, the [default selectors](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/api/defaults.md) are used. To add your own selectors and keep the defaults, wrap them in an object with an `extends` key:
 
-For example, to only highlight `cn()` calls and a custom `myUtility()` function:
+```jsonc
+{
+  "tailwindcssSyntaxHighlighting.selectors": {
+    "extends": [
+      {
+        "kind": "callee",
+        "name": "^myUtility$",
+        "match": [{ "type": "strings" }]
+      }
+    ]
+  }
+}
+```
+
+An array replaces the default selectors instead. For example, to only highlight `cn()` calls and a custom `myUtility()` function:
 
 ```jsonc
 {

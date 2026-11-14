@@ -19,16 +19,37 @@ describe("resolveSelectors", () => {
     expect(resolveSelectors(undefined)).toEqual({ invalid: [], selectors: DEFAULT_SELECTORS });
   });
 
-  it("should declare the default selectors as the default value of the setting", () => {
+  it("should not declare a default value for the setting", () => {
     const packageJson = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
     const setting = packageJson.contributes.configuration.properties["tailwindcssSyntaxHighlighting.selectors"];
-    expect(setting.default).toEqual(JSON.parse(JSON.stringify(DEFAULT_SELECTORS)));
+    expect(setting).not.toHaveProperty("default");
   });
 
   it("should replace the default selectors", async () => {
     const code = "myUtility(\"p-2\", a === \"b\" && \"m-2\"); cn(\"flex\")";
     const setting = [{ kind: "callee", match: [{ type: "strings" }], name: "^myUtility$" }];
     expect(await getClasses(code, setting)).toEqual(["p-2", "m-2"]);
+  });
+
+  it("should extend the default selectors", async () => {
+    const code = "myUtility(\"p-2\"); cn(\"flex\")";
+    const setting = { extends: [{ kind: "callee", match: [{ type: "strings" }], name: "^myUtility$" }] };
+    expect(await getClasses(code, setting)).toEqual(["p-2", "flex"]);
+  });
+
+  it("should keep the default selectors when an extended selector is invalid", () => {
+    const { invalid, selectors } = resolveSelectors({ extends: [{ kind: "callee", name: "(" }] });
+    expect(selectors).toEqual(DEFAULT_SELECTORS);
+    expect(invalid).toHaveLength(1);
+    expect(invalid[0]).toMatch(/^selectors\.extends\[0]: "name" is not a valid regular expression/);
+  });
+
+  it("should report an invalid setting and fall back to the default selectors", () => {
+    for(const setting of ["cn", { selectors: [] }]){
+      const { invalid, selectors } = resolveSelectors(setting);
+      expect(selectors).toEqual(DEFAULT_SELECTORS);
+      expect(invalid).toEqual(["selectors: must be an array of selectors or an object with an \"extends\" array"]);
+    }
   });
 
   it("should support selectors with paths and object matchers", async () => {

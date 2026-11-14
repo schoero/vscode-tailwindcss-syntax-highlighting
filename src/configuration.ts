@@ -19,13 +19,31 @@ export function readSettings(configuration: { get: (key: string) => unknown; }):
   };
 }
 
-// Like the `selectors` option of eslint-plugin-better-tailwindcss, the setting replaces the defaults.
+// Like the `selectors` option of eslint-plugin-better-tailwindcss, an array replaces the defaults and
+// `{ extends: [...] }` adds to them. The defaults are not the setting's default value in package.json,
+// because VS Code would copy them into settings.json, where they would no longer receive updates.
 // `invalid` lists the selectors that were skipped, with the reason.
 export function resolveSelectors(setting: unknown): { invalid: string[]; selectors: Selectors; } {
-  if(!Array.isArray(setting)){
+  if(setting === undefined || setting === null){
     return { invalid: [], selectors: DEFAULT_SELECTORS };
   }
 
+  if(Array.isArray(setting)){
+    return validateSelectors(setting, "selectors");
+  }
+
+  if(isRecord(setting) && Array.isArray(setting.extends)){
+    const { invalid, selectors } = validateSelectors(setting.extends, "selectors.extends");
+    return { invalid, selectors: [...DEFAULT_SELECTORS, ...selectors] };
+  }
+
+  return {
+    invalid: ["selectors: must be an array of selectors or an object with an \"extends\" array"],
+    selectors: DEFAULT_SELECTORS
+  };
+}
+
+function validateSelectors(setting: unknown[], label: string): { invalid: string[]; selectors: Selectors; } {
   const invalid: string[] = [];
   const selectors: Selectors = [];
 
@@ -33,7 +51,7 @@ export function resolveSelectors(setting: unknown): { invalid: string[]; selecto
     const error = validateSelector(selector);
 
     if(error){
-      invalid.push(`selectors[${index}]: ${error}`);
+      invalid.push(`${label}[${index}]: ${error}`);
     } else {
       selectors.push(selector as Selector);
     }
