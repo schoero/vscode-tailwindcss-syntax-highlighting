@@ -1,4 +1,4 @@
-import { visitorKeys } from "oxc-parser/src-js/wasm.js";
+import visitorKeys from "oxc-parser/src-js/generated/visit/keys.js";
 
 import type { Node } from "estree";
 
