@@ -75,11 +75,11 @@ interface NodeBase extends Range, Loc {
 
 interface LiteralBase extends NodeBase, MultilineMeta, QuoteMeta, BracesMeta, BindingMeta, WhitespaceMeta, CSSMeta, Indentation, Range, Loc {
   content: string;
+  raw: string;
   /** How this literal is concatenated with its neighbors. Computed on the first call, because only some rules need it. */
   getConcatenation: () => Concatenation;
   /** Literals before this one in the same expression. Computed on the first call, because only some rules need it. */
   getPriorLiterals: () => Literal[];
-  raw: string;
   attribute?: string | undefined;
   isInterpolated?: boolean | undefined;
 }

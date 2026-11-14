@@ -58,7 +58,7 @@
     "oxc-parser": "^0.158.0",
     "svelte": "^5.57.3",
     "tailwind-csstree": "^0.3.3",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vite": "^8.3.8",
     "vitest": "^5.1.0",
     "vsce": "^2.15.0"
@@ -281,665 +281,523 @@
           "type": "boolean"
         },
         "tailwindcssSyntaxHighlighting.selectors": {
-          "default": [
+          "anyOf": [
             {
-              "kind": "attribute",
-              "name": "^class(?:Name)?$"
-            },
-            {
-              "kind": "attribute",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^class(?:Name)?$"
-            },
-            {
-              "kind": "attribute",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^class:.*$"
-            },
-            {
-              "kind": "attribute",
-              "name": "(?:^\\[class\\]$)|(?:^\\[ngClass\\]$)"
-            },
-            {
-              "kind": "attribute",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "(?:^\\[class\\..*\\]$)"
-            },
-            {
-              "kind": "attribute",
-              "match": [
-                {
-                  "type": "strings"
-                },
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "(?:^\\[class\\]$)|(?:^\\[ngClass\\]$)"
-            },
-            {
-              "kind": "attribute",
-              "match": [
-                {
-                  "type": "strings"
-                },
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^v-bind:class$"
-            },
-            {
-              "kind": "attribute",
-              "match": [
-                {
-                  "type": "strings"
-                },
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^class:list$"
-            },
-            {
-              "kind": "attribute",
-              "match": [
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^classList$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^cc$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^cc$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^base$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^clb$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^variants.*$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^clb$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^compoundVariants\\[\\d+\\]\\.classes$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^clb$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^clsx$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^clsx$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^cn$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^cn$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^cnb$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^cnb$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^ctl$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^cva$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^variants.*$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^cva$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^compoundVariants\\[\\d+\\]\\.(?:className|class)$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^cva$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^cx$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^cx$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^dcnb$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^dcnb$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "objectKeys"
-                }
-              ],
-              "name": "^objstr$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^tv$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^variants.*$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^tv$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^compoundVariants\\[\\d+\\]\\.(?:className|class).*$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^tv$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^base$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^tv$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^slots.*$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^tv$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "path": "^compoundSlots\\[\\d+\\]\\.(?:className|class).*$",
-                  "type": "objectValues"
-                }
-              ],
-              "name": "^tv$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^twJoin$"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^twMerge$"
-            },
-            {
-              "kind": "variable",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^classNames?$"
-            },
-            {
-              "kind": "variable",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^classes$"
-            },
-            {
-              "kind": "variable",
-              "match": [
-                {
-                  "type": "strings"
-                }
-              ],
-              "name": "^styles?$"
-            },
-            {
-              "kind": "tag",
-              "path": "twc(\\.\\w+)?"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                },
-                {
-                  "match": [
-                    {
-                      "type": "strings"
-                    }
-                  ],
-                  "type": "anonymousFunctionReturn"
-                }
-              ],
-              "path": "^twc\\.\\w+"
-            },
-            {
-              "kind": "tag",
-              "path": "twx(\\.\\w+)?"
-            },
-            {
-              "kind": "callee",
-              "match": [
-                {
-                  "type": "strings"
-                },
-                {
-                  "match": [
-                    {
-                      "type": "strings"
-                    }
-                  ],
-                  "type": "anonymousFunctionReturn"
-                }
-              ],
-              "path": "^twx\\.\\w+"
-            }
-          ],
-          "items": {
-            "additionalProperties": false,
-            "anyOf": [
-              {
-                "required": [
-                  "name"
-                ]
-              },
-              {
-                "required": [
-                  "path"
-                ]
-              }
-            ],
-            "defaultSnippets": [
-              {
-                "body": {
-                  "kind": "callee",
-                  "match": [
-                    {
-                      "type": "strings"
-                    }
-                  ],
-                  "name": "^${1:myUtility}$"
-                },
-                "label": "Callee"
-              },
-              {
-                "body": {
-                  "kind": "variable",
-                  "match": [
-                    {
-                      "type": "strings"
-                    }
-                  ],
-                  "name": "^${1:myClasses}$"
-                },
-                "label": "Variable"
-              },
-              {
-                "body": {
-                  "kind": "attribute",
-                  "match": [
-                    {
-                      "type": "strings"
-                    }
-                  ],
-                  "name": "^${1:myClass}$"
-                },
-                "label": "Attribute"
-              },
-              {
-                "body": {
-                  "kind": "tag",
-                  "path": "^${1:myTag}$"
-                },
-                "label": "Tagged template"
-              }
-            ],
-            "properties": {
-              "kind": {
-                "description": "Where the selector applies.",
-                "enum": [
-                  "attribute",
-                  "callee",
-                  "tag",
-                  "variable"
+              "description": "Replaces the default selectors.",
+              "items": {
+                "additionalProperties": false,
+                "anyOf": [
+                  {
+                    "required": [
+                      "name"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "path"
+                    ]
+                  }
                 ],
-                "enumDescriptions": [
-                  "JSX and Svelte attributes, matched by `name`.",
-                  "Function calls, matched by `name` (`cn`) or `path` (`utils.cn`).",
-                  "Tagged template literals, matched by `name` or `path`.",
-                  "Variable declarations, matched by `name`."
-                ]
+                "defaultSnippets": [
+                  {
+                    "body": {
+                      "kind": "callee",
+                      "match": [
+                        {
+                          "type": "strings"
+                        }
+                      ],
+                      "name": "^${1:myUtility}$"
+                    },
+                    "label": "Callee"
+                  },
+                  {
+                    "body": {
+                      "kind": "variable",
+                      "match": [
+                        {
+                          "type": "strings"
+                        }
+                      ],
+                      "name": "^${1:myClasses}$"
+                    },
+                    "label": "Variable"
+                  },
+                  {
+                    "body": {
+                      "kind": "attribute",
+                      "match": [
+                        {
+                          "type": "strings"
+                        }
+                      ],
+                      "name": "^${1:myClass}$"
+                    },
+                    "label": "Attribute"
+                  },
+                  {
+                    "body": {
+                      "kind": "tag",
+                      "path": "^${1:myTag}$"
+                    },
+                    "label": "Tagged template"
+                  }
+                ],
+                "properties": {
+                  "kind": {
+                    "description": "Where the selector applies.",
+                    "enum": [
+                      "attribute",
+                      "callee",
+                      "tag",
+                      "variable"
+                    ],
+                    "enumDescriptions": [
+                      "JSX and Svelte attributes, matched by `name`.",
+                      "Function calls, matched by `name` (`cn`) or `path` (`utils.cn`).",
+                      "Tagged template literals, matched by `name` or `path`.",
+                      "Variable declarations, matched by `name`."
+                    ]
+                  },
+                  "match": {
+                    "description": "Matchers that select the strings inside the matched node. Without matchers, only a string passed directly is matched.",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "type": {
+                              "const": "strings",
+                              "description": "Matches all strings that are not matched by another matcher."
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "path": {
+                              "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                              "type": "string"
+                            },
+                            "type": {
+                              "const": "objectKeys",
+                              "description": "Matches object keys."
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "path": {
+                              "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                              "type": "string"
+                            },
+                            "type": {
+                              "const": "objectValues",
+                              "description": "Matches string object values."
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "match": {
+                              "description": "Matchers applied to the return value of anonymous functions.",
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "type": {
+                                        "const": "strings",
+                                        "description": "Matches all strings that are not matched by another matcher."
+                                      }
+                                    },
+                                    "required": [
+                                      "type"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "path": {
+                                        "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "const": "objectKeys",
+                                        "description": "Matches object keys."
+                                      }
+                                    },
+                                    "required": [
+                                      "type"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "path": {
+                                        "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "const": "objectValues",
+                                        "description": "Matches string object values."
+                                      }
+                                    },
+                                    "required": [
+                                      "type"
+                                    ],
+                                    "type": "object"
+                                  }
+                                ]
+                              },
+                              "type": "array"
+                            },
+                            "type": {
+                              "const": "anonymousFunctionReturn",
+                              "description": "Matches the return value of anonymous functions with nested matchers."
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "match"
+                          ],
+                          "type": "object"
+                        }
+                      ]
+                    },
+                    "type": "array"
+                  },
+                  "name": {
+                    "description": "Regular expression that must match the whole name, for example `^cn$`.",
+                    "type": "string"
+                  },
+                  "path": {
+                    "description": "Regular expression that must match the whole path of a callee or tag, for example `^styled\\.\\w+$`.",
+                    "type": "string"
+                  },
+                  "targetArgument": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "all",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ],
+                    "description": "Which arguments of the call are matched: an index, `first`, `last` or `all` (default)."
+                  },
+                  "targetCall": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "all",
+                          "first",
+                          "last"
+                        ]
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ],
+                    "description": "Which call of a curried callee is matched: an index, `first` (default), `last` or `all`."
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "type": "object"
               },
-              "match": {
-                "description": "Matchers that select the strings inside the matched node. Without matchers, only a string passed directly is matched.",
-                "items": {
-                  "anyOf": [
-                    {
-                      "additionalProperties": false,
-                      "properties": {
-                        "type": {
-                          "const": "strings",
-                          "description": "Matches all strings that are not matched by another matcher."
-                        }
+              "type": "array"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "extends": {
+                  "description": "Selectors that are added to the default selectors.",
+                  "items": {
+                    "additionalProperties": false,
+                    "anyOf": [
+                      {
+                        "required": [
+                          "name"
+                        ]
                       },
-                      "required": [
-                        "type"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "additionalProperties": false,
-                      "properties": {
-                        "path": {
-                          "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
-                          "type": "string"
+                      {
+                        "required": [
+                          "path"
+                        ]
+                      }
+                    ],
+                    "defaultSnippets": [
+                      {
+                        "body": {
+                          "kind": "callee",
+                          "match": [
+                            {
+                              "type": "strings"
+                            }
+                          ],
+                          "name": "^${1:myUtility}$"
                         },
-                        "type": {
-                          "const": "objectKeys",
-                          "description": "Matches object keys."
-                        }
+                        "label": "Callee"
                       },
-                      "required": [
-                        "type"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "additionalProperties": false,
-                      "properties": {
-                        "path": {
-                          "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
-                          "type": "string"
+                      {
+                        "body": {
+                          "kind": "variable",
+                          "match": [
+                            {
+                              "type": "strings"
+                            }
+                          ],
+                          "name": "^${1:myClasses}$"
                         },
-                        "type": {
-                          "const": "objectValues",
-                          "description": "Matches string object values."
-                        }
+                        "label": "Variable"
                       },
-                      "required": [
-                        "type"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "additionalProperties": false,
-                      "properties": {
-                        "match": {
-                          "description": "Matchers applied to the return value of anonymous functions.",
-                          "items": {
-                            "anyOf": [
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "type": {
-                                    "const": "strings",
-                                    "description": "Matches all strings that are not matched by another matcher."
-                                  }
-                                },
-                                "required": [
-                                  "type"
-                                ],
-                                "type": "object"
+                      {
+                        "body": {
+                          "kind": "attribute",
+                          "match": [
+                            {
+                              "type": "strings"
+                            }
+                          ],
+                          "name": "^${1:myClass}$"
+                        },
+                        "label": "Attribute"
+                      },
+                      {
+                        "body": {
+                          "kind": "tag",
+                          "path": "^${1:myTag}$"
+                        },
+                        "label": "Tagged template"
+                      }
+                    ],
+                    "properties": {
+                      "kind": {
+                        "description": "Where the selector applies.",
+                        "enum": [
+                          "attribute",
+                          "callee",
+                          "tag",
+                          "variable"
+                        ],
+                        "enumDescriptions": [
+                          "JSX and Svelte attributes, matched by `name`.",
+                          "Function calls, matched by `name` (`cn`) or `path` (`utils.cn`).",
+                          "Tagged template literals, matched by `name` or `path`.",
+                          "Variable declarations, matched by `name`."
+                        ]
+                      },
+                      "match": {
+                        "description": "Matchers that select the strings inside the matched node. Without matchers, only a string passed directly is matched.",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "type": {
+                                  "const": "strings",
+                                  "description": "Matches all strings that are not matched by another matcher."
+                                }
                               },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "path": {
-                                    "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
-                                    "type": "string"
-                                  },
-                                  "type": {
-                                    "const": "objectKeys",
-                                    "description": "Matches object keys."
-                                  }
+                              "required": [
+                                "type"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "path": {
+                                  "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                                  "type": "string"
                                 },
-                                "required": [
-                                  "type"
-                                ],
-                                "type": "object"
+                                "type": {
+                                  "const": "objectKeys",
+                                  "description": "Matches object keys."
+                                }
                               },
-                              {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "path": {
-                                    "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
-                                    "type": "string"
-                                  },
-                                  "type": {
-                                    "const": "objectValues",
-                                    "description": "Matches string object values."
-                                  }
+                              "required": [
+                                "type"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "path": {
+                                  "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                                  "type": "string"
                                 },
-                                "required": [
-                                  "type"
-                                ],
-                                "type": "object"
-                              }
+                                "type": {
+                                  "const": "objectValues",
+                                  "description": "Matches string object values."
+                                }
+                              },
+                              "required": [
+                                "type"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "match": {
+                                  "description": "Matchers applied to the return value of anonymous functions.",
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "type": {
+                                            "const": "strings",
+                                            "description": "Matches all strings that are not matched by another matcher."
+                                          }
+                                        },
+                                        "required": [
+                                          "type"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "path": {
+                                            "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                                            "type": "string"
+                                          },
+                                          "type": {
+                                            "const": "objectKeys",
+                                            "description": "Matches object keys."
+                                          }
+                                        },
+                                        "required": [
+                                          "type"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "path": {
+                                            "description": "Regular expression for the object path, for example `^variants.*$` or `^compoundVariants\\[\\d+\\]\\.class$`.",
+                                            "type": "string"
+                                          },
+                                          "type": {
+                                            "const": "objectValues",
+                                            "description": "Matches string object values."
+                                          }
+                                        },
+                                        "required": [
+                                          "type"
+                                        ],
+                                        "type": "object"
+                                      }
+                                    ]
+                                  },
+                                  "type": "array"
+                                },
+                                "type": {
+                                  "const": "anonymousFunctionReturn",
+                                  "description": "Matches the return value of anonymous functions with nested matchers."
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "match"
+                              ],
+                              "type": "object"
+                            }
+                          ]
+                        },
+                        "type": "array"
+                      },
+                      "name": {
+                        "description": "Regular expression that must match the whole name, for example `^cn$`.",
+                        "type": "string"
+                      },
+                      "path": {
+                        "description": "Regular expression that must match the whole path of a callee or tag, for example `^styled\\.\\w+$`.",
+                        "type": "string"
+                      },
+                      "targetArgument": {
+                        "anyOf": [
+                          {
+                            "enum": [
+                              "all",
+                              "first",
+                              "last"
                             ]
                           },
-                          "type": "array"
-                        },
-                        "type": {
-                          "const": "anonymousFunctionReturn",
-                          "description": "Matches the return value of anonymous functions with nested matchers."
-                        }
+                          {
+                            "type": "integer"
+                          }
+                        ],
+                        "description": "Which arguments of the call are matched: an index, `first`, `last` or `all` (default)."
                       },
-                      "required": [
-                        "type",
-                        "match"
-                      ],
-                      "type": "object"
-                    }
-                  ]
-                },
-                "type": "array"
-              },
-              "name": {
-                "description": "Regular expression that must match the whole name, for example `^cn$`.",
-                "type": "string"
-              },
-              "path": {
-                "description": "Regular expression that must match the whole path of a callee or tag, for example `^styled\\.\\w+$`.",
-                "type": "string"
-              },
-              "targetArgument": {
-                "anyOf": [
-                  {
-                    "enum": [
-                      "all",
-                      "first",
-                      "last"
-                    ]
+                      "targetCall": {
+                        "anyOf": [
+                          {
+                            "enum": [
+                              "all",
+                              "first",
+                              "last"
+                            ]
+                          },
+                          {
+                            "type": "integer"
+                          }
+                        ],
+                        "description": "Which call of a curried callee is matched: an index, `first` (default), `last` or `all`."
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ],
+                    "type": "object"
                   },
-                  {
-                    "type": "integer"
-                  }
-                ],
-                "description": "Which arguments of the call are matched: an index, `first`, `last` or `all` (default)."
+                  "type": "array"
+                }
               },
-              "targetCall": {
-                "anyOf": [
-                  {
-                    "enum": [
-                      "all",
-                      "first",
-                      "last"
-                    ]
-                  },
-                  {
-                    "type": "integer"
-                  }
-                ],
-                "description": "Which call of a curried callee is matched: an index, `first` (default), `last` or `all`."
-              }
+              "required": [
+                "extends"
+              ],
+              "type": "object"
+            }
+          ],
+          "defaultSnippets": [
+            {
+              "bodyText": "{\n\t\"extends\": [\n\t\t$1\n\t]\n}",
+              "label": "Extend default selectors"
             },
-            "required": [
-              "kind"
-            ],
-            "type": "object"
-          },
-          "markdownDescription": "Selectors that decide which strings are highlighted, in the same format as the [`selectors` option of eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/settings/settings.md#selectors). Setting it replaces the defaults, so remove the entries you don't want and add your own.",
-          "order": 1,
-          "type": "array"
+            {
+              "bodyText": "[\n\t$1\n]",
+              "label": "Replace default selectors"
+            }
+          ],
+          "markdownDescription": "Selectors that decide which strings are highlighted, in the same format as the [`selectors` option of eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/settings/settings.md#selectors). An array replaces the default selectors. Wrap the selectors in `{ \"extends\": [...] }` to add them to the defaults instead.",
+          "order": 1
         }
       },
       "title": "Tailwind CSS Syntax Highlighting"
