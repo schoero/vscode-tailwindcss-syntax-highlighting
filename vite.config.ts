@@ -47,6 +47,7 @@ export default defineConfig(({ command, mode }) => (<UserConfig>{
     minify: mode !== "development",
     outDir: "dist",
     rolldownOptions: {
+      devtools: { mode: "report" },
       external: ["vscode"],
       output: {
         // Vite keeps whitespace in ES library builds so consumers can still tree-shake them, but
